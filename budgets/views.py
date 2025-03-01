@@ -6,8 +6,4 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'budgets/pages/home.html')
 
-def sobre(request):
-    return HttpResponse('SOBRE')
 
-def contato(request):
-    return HttpResponse('CONTATO')
