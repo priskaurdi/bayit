@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory</title>
+</head>
+<body>
+    <h1>Theory</h1>
+
+    <p>Qtd. total de orçamentos: {{ number_of_budgets }}</p>
+    
+    <ul>
+        {% for budget in budgets %}
+        <li>{{ budget.id }} {{ budget.title }} {{ budget.author_full_name }}</li>
+        {% empty %}
+        <p>No budgets found</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>
