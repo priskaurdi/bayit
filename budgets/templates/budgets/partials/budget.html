@@ -125,6 +125,12 @@
 
     {% if is_detail_page is True %}
         <div class="budget-details">
+            {% if budget.budget_detail_is_html is True %}
+                {{ budget.budget_detail|safe }}
+            {% else %}
+                {{ budget.budget_detail|linebreaksbr }}
+            {% endif %}
+
             {% if user == budget.author or user.is_staff %}
                 <div class="author-details">
                     <h3>Detalhes do Cliente</h3>

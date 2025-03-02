@@ -261,6 +261,13 @@ a {
 .preparation-steps {
     padding: var(--spacing-gutter-medium);
 }
+.budget-details {
+    padding: var(--spacing-gutter-medium);
+}
+
+/* author-details */
+/* address-details */
+/* equipment-details */
 
 .main-footer {
     display: flex;
@@ -292,8 +299,25 @@ a {
     margin: 2rem 0;
 }
 
+.budget-details h1,
+.budget-details h2,
+.budget-details h3,
+.budget-details h4,
+.budget-details h5,
+.budget-details h6,
+.budget-details p,
+.budget-details pre {
+    margin: 2rem 0;
+}
+
 .preparation-steps ol,
 .preparation-steps ul {
+    margin: 2rem;
+    padding: 0 2rem;
+}
+
+.budget-details ol,
+.budget-details ul {
     margin: 2rem;
     padding: 0 2rem;
 }

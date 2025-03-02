@@ -14,6 +14,7 @@ fake = Faker('pt_BR')
 
 def make_budget():
     return {
+        #'id': fake.random_number(digits=2, fix_len=True),
         'title': fake.sentence(nb_words=6), # Título da solicitação
         'description': fake.sentence(nb_words=12), # Descrição do problema
         'service_type': fake.random_element(elements=('Manutenção', 'Instalação', 'Limpeza')), # Tipo de serviço
