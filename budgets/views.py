@@ -1,6 +1,4 @@
-#from django.http import HttpResponse
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 from utils.budgets.factory import make_budget
 
@@ -9,29 +7,35 @@ from .models import Budget
 # Create your views here.
 
 def home(request):
-    budgets = Budget.objects.filter(
-        is_published=True
-    ).order_by('-id')
+    budgets = get_list_or_404(
+            Budget.objects.filter(
+            is_published=True
+        ).order_by('-id')
+    )
     return render(request, 'budgets/pages/home.html', context={
         'budgets': budgets,
     })
 
 def category(request, category_id):
-    budgets = Budget.objects.filter(
-        category__id=category_id, 
-        is_published=True
-    ).order_by('-id')
+    budgets = get_list_or_404(
+            Budget.objects.filter(
+            category__id=category_id, 
+            is_published=True
+        ).order_by('-id')
+    )
 
-    if not budgets:
-        raise Http404('Not found 🥲')
-    
     return render(request, 'budgets/pages/category.html', context={
         'budgets': budgets,
-        'title': f'{budgets.first().category.name} - Category | '
+        'title': f'{budgets[0].category.name} - Category | '
     })
 
 def budget(request, id):
+    budget = get_object_or_404(Budget,
+        pk=id,
+        is_published=True,
+    )
+
     return render(request, 'budgets/pages/budget-view.html', context={
-        'budget': make_budget(),
+        'budget': budget,
         'is_detail_page': True,
     })
