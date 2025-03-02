@@ -44,6 +44,11 @@
             {{ budget.created_at|date:"d/m/Y" }} às {{ budget.created_at|date:"H:i" }}
         </span>
 
+        <span class="budget-author-item">
+            <i class="fas fa-tools"></i>
+            <span>{{ budget.service_type }}</span>
+        </span>
+
         {% if budget.category is not None %}
             <span class="budget-author-item">
                 <a href="{% url 'budgets:category' budget.category.id %}">
@@ -73,6 +78,21 @@
         </div>
     </div>
 
+    <div class="budget-meta-container">
+        <div class="budget-meta budget-scheduled">
+            <h3 class="budget-meta-title"><i class="fas fa-calendar-check"></i> {% translate 'Agendado' %}</h3>
+            <div class="budget-meta-text">
+                {{ budget.scheduled_date|date:"d/m/Y" }} às {{ budget.scheduled_time }}
+            </div>
+        </div>
+        <div class="budget-meta budget-status">
+            <h3 class="budget-meta-title"><i class="fas fa-tasks"></i> {% translate 'Status' %}</h3>
+            <div class="budget-meta-text">
+                {{ budget.status }}
+            </div>
+        </div>
+    </div>
+
     {% if is_detail_page is not True %}
         <footer class="budget-footer">
             <a class="budget-read-more button button-dark button-full-width" href="{% url 'budgets:budget' budget.id %}">
@@ -88,6 +108,47 @@
                 {{ budget.preparation_steps|safe }}
             {% else %}
                 {{ budget.preparation_steps|linebreaksbr }}
+            {% endif %}
+
+            {% if budget.tags.all %}
+                <p>
+                    Tags:
+                    {% for tag in budget.tags.all %}
+                        <a href="{% url 'budgets:tag' tag.slug %}">
+                            {{ tag.name }}
+                        </a>, 
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if is_detail_page is True %}
+        <div class="budget-details">
+            {% if user == budget.author or user.is_staff %}
+                <div class="author-details">
+                    <h3>Detalhes do Cliente</h3>
+                    <p>Nome: {{ budget.author.first_name }} {{ budget.author.last_name }}</p>
+                    <p>Telefone: {{ budget.author.phone }}</p>
+                    <p>Email: {{ budget.author.email }}</p>
+                </div>
+
+                <div class="address-details">
+                    <h3>Endereço</h3>
+                    <p>Rua: {{ budget.address.street }}, {{ budget.address.number }}</p>
+                    <p>Bairro: {{ budget.address.neighborhood }}</p>
+                    <p>Cidade: {{ budget.address.city }}, {{ budget.address.state }}</p>
+                    <p>CEP: {{ budget.address.zipcode }}</p>
+                </div>
+
+                <div class="equipment-details">
+                    <h3>Detalhes do Equipamento</h3>
+                    <p>Marca: {{ budget.equipment.brand }}</p>
+                    <p>Modelo: {{ budget.equipment.model }}</p>
+                    <p>BTUs: {{ budget.equipment.btus }}</p>
+                </div>
+            {% else %}
+                <p>Você não tem permissão para ver esses detalhes.</p>
             {% endif %}
 
             {% if budget.tags.all %}

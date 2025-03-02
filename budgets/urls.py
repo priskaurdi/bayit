@@ -1,7 +1,8 @@
 from django.urls import path
 
-from budgets.views import home
+from . import views
 
 urlpatterns = [
-    path('/', home),
+    path('/', views.home),
+    path('budgets/<int:id>/', views.budget),
 ]
