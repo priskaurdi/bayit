@@ -6,6 +6,8 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=65)
 
+    def __str__(self):
+        return self.name
 
 class Budget(models.Model):
     title = models.CharField(max_length=65)
@@ -26,7 +28,7 @@ class Budget(models.Model):
     zipcode = models.CharField(max_length=10)
     #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='budget')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     equipment_brand = models.CharField(max_length=50)
     equipment_model = models.CharField(max_length=50)
     equipment_btus = models.IntegerField()
@@ -49,10 +51,12 @@ class Budget(models.Model):
     ], default='Pendente')
     #service_provider = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='provided_services')
     #tags = models.ManyToManyField('Tag', blank=True)
-    cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/')
+    cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/',  blank=True, default='')
 
-# def __str__(self):
-#         return self.title
+    def __str__(self):
+            return self.title
+    
+
 
 # class Tag(models.Model):
 #     name = models.CharField(max_length=50)
