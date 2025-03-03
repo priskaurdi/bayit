@@ -56,7 +56,7 @@ def search(request):
         is_published=True
     ).order_by('-id')
     
-    return render(request, 'budgets/pages/search.html'{
+    return render(request, 'budgets/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
         'search_term': search_term,
         'budgets': budgets,
