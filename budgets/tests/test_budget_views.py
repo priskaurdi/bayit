@@ -127,7 +127,7 @@ class BudgetViewsTest(BudgetTestBase):
         budget = self.make_budget(is_published=False)
 
         response = self.client.get(
-            reverse('budgets:budget', kwargs={'id': budget.category.id})
+            reverse('budgets:budget', kwargs={'id': budget.id})
         )
 
         self.assertEqual(response.status_code, 404)
