@@ -3,10 +3,11 @@ from django.urls import resolve, reverse
 
 from budgets import views
 
+from .test_budget_base import BudgetTestBase
+
 # Create your tests here.
 
-
-class BudgetViewsTest(TestCase):
+class BudgetViewsTest(BudgetTestBase):
     def test_budget_home_view_function_is_correct(self):
         view = resolve(reverse('budgets:home'))
         self.assertIs(view.func, views.home)
@@ -25,6 +26,23 @@ class BudgetViewsTest(TestCase):
             '<h1>No budgets found here 🥲</h1>',
             response.content.decode('utf-8')
         )
+
+        # Tenho que revisar mais algumas coisas sobre o test
+        self.fail('Para que eu possa entender onde to errando')
+
+    
+    def test_budget_home_template_loads_budgets(self):
+        # Need a budget for this test
+        self.make_budget()
+
+        response = self.client.get(reverse('budgets:home'))
+        content = response.content.decode('utf-8')
+        response_context_budgets = response.context['budgets']
+
+        # Check if one budget exists
+        self.assertIn('Budget Title', content)
+        self.assertEqual(len(response_context_budgets), 1)
+
     
     def test_budget_category_view_function_is_correct(self):
         view = resolve(
