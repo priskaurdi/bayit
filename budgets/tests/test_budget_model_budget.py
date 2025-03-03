@@ -15,7 +15,7 @@ class BudgetModelTest(BudgetTestBase):
             author=self.make_author(username='newuser'),
             title='Budget Title',
             description='Budget Description',
-            slug='budget-slug',
+            slug='budget-slug-for-no-defaults',
             equipment_brand='Marca',
             equipment_model='Modelo',
             equipment_btus='BTUs',

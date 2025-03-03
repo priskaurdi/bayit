@@ -7,7 +7,8 @@ app_name = 'budgets'
 
 urlpatterns = [
     path('', views.home, name="home"), #budgets-home
-    
+    path('budgets/search/', views.search, name="search"), 
     path('budgets/category/<int:category_id>/', views.category, name="category"),
     path('budgets/<int:id>/', views.budget, name="budget"), #budgets-budget
+    
 ]

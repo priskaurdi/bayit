@@ -14,3 +14,7 @@ class BudgetURLsTest(TestCase):
     def test_budget_detail_url_is_correct(self):
         url = reverse('budgets:budget', kwargs={'id': 1})
         self.assertEqual(url, '/budgets/1/')
+    
+    def test_budget_search_url_is_correct(self):
+        url = reverse('budgets:search')
+        self.assertEqual(url, '/budgets/search/')

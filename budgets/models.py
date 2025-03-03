@@ -12,7 +12,7 @@ class Category(models.Model):
 class Budget(models.Model):
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     service_type = models.CharField(max_length=50, choices=[
         ('Manutenção', 'Manutenção'),
         ('Instalação', 'Instalação'),
