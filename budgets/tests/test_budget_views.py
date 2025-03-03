@@ -43,7 +43,19 @@ class BudgetViewsTest(BudgetTestBase):
         self.assertIn('Budget Title', content)
         self.assertEqual(len(response_context_budgets), 1)
 
-    
+    def test_budget_home_template_dont_load_budgets_not_published(self):
+        """Test budget is_published False dont show"""
+        # Need a budget for this test
+        self.make_budget(is_published=False)
+
+        response = self.client.get(reverse('budgets:home'))
+
+        # Check if one budget exists
+        self.assertIn(
+            '<h1>No budgets found here 🥲</h1>',
+            response.content.decode('utf-8')
+        )
+
     def test_budget_category_view_function_is_correct(self):
         view = resolve(
             reverse('budgets:category', kwargs={'category_id': 1000})
@@ -56,6 +68,28 @@ class BudgetViewsTest(BudgetTestBase):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_budget_category_template_loads_budgets(self):
+        needed_title = 'This is a category test'
+        # Need a budget for this test
+        self.make_budget(title=needed_title)
+
+        response = self.client.get(reverse('budgets:category', args=(1,)))
+        content = response.content.decode('utf-8')
+
+        # Check if one budget exists
+        self.assertIn(needed_title, content)
+
+    def test_budget_category_template_dont_load_budgets_not_published(self):
+        """Test budget is_published False dont show"""
+        # Need a budget for this test
+        budget = self.make_budget(is_published=False)
+
+        response = self.client.get(
+            reverse('budgets:budget', kwargs={'id': budget.category.id})
+        )
+
+        self.assertEqual(response.status_code, 404)
+
     def test_budget_detail_view_function_is_correct(self):
         view = resolve(
             reverse('budgets:budget', kwargs={'id': 1})
@@ -66,4 +100,34 @@ class BudgetViewsTest(BudgetTestBase):
         response = self.client.get(
             reverse('budgets:budget', kwargs={'id': 1000})
         )
+        self.assertEqual(response.status_code, 404)
+
+    def test_budget_detail_template_loads_the_correct_budget(self):
+        needed_title = 'This is a detail page - It load one budget'
+
+        # Need a budget for this test
+        self.make_budget(title=needed_title)
+
+        response = self.client.get(
+            reverse(
+                'budgets:budget',
+                kwargs={
+                    'id': 1
+                }
+            )
+        )
+        content = response.content.decode('utf-8')
+
+        # Check if one budget exists
+        self.assertIn(needed_title, content)    
+    
+    def test_budget_detail_template_dont_load_budget_not_published(self):
+        """Test budget is_published False dont show"""
+        # Need a budget for this test
+        budget = self.make_budget(is_published=False)
+
+        response = self.client.get(
+            reverse('budgets:budget', kwargs={'id': budget.category.id})
+        )
+
         self.assertEqual(response.status_code, 404)
