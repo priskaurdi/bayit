@@ -563,6 +563,7 @@ a {
 
 @media (max-width: 600px) {
     .main-content-list,
+    .main-logo-text,
     .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
