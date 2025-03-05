@@ -112,6 +112,17 @@ a {
 
 }
 
+.logo-small {
+    width: 7.125rem; /* 50px ÷ 16 */
+    height: auto;
+    vertical-align: middle;
+    margin-right: 0.625rem; /* 10px ÷ 16 */
+}
+
+.main-logo-small {
+    font-size: 2rem; /* 14px ÷ 16 */
+}
+
 .main-logo-icon {
     margin-right: 2rem;
 }
