@@ -53,9 +53,7 @@ class BudgetHomeViewTest(BudgetTestBase):
         )
 
     def test_budget_home_is_paginated(self):
-        for i in range(8):
-            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
-            self.make_budget(**kwargs)
+        self.make_budget_in_batch(qtd=8)
 
         with patch('budgets.views.PER_PAGE', new=3):
             response = self.client.get(reverse('budgets:home'))
@@ -66,3 +64,9 @@ class BudgetHomeViewTest(BudgetTestBase):
             self.assertEqual(len(paginator.get_page(1)), 3)
             self.assertEqual(len(paginator.get_page(2)), 3)
             self.assertEqual(len(paginator.get_page(3)), 2)
+    
+    def test_invalid_page_query_uses_page_one(self):
+        self.make_budget_in_batch(qtd=8)
+
+        with patch('budgets.views.PER_PAGE', new=3):
+            response = self.client.get(reverse('budgets:home') + '?page=12A')

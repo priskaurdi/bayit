@@ -3,10 +3,7 @@ from django.test import TestCase
 from budgets.models import Budget, Category, User
 
 
-class BudgetTestBase(TestCase):
-    def setUp(self) -> None:
-        return super().setUp()
-
+class BudgetMixin:
     def make_category(self, name='Category'):
         return Category.objects.create(name=name)
 
@@ -63,3 +60,15 @@ class BudgetTestBase(TestCase):
             preparation_steps_is_html=preparation_steps_is_html,
             is_published=is_published,
         )
+    
+    def make_budget_in_batch(self, qtd=10):
+        budgets = []
+        for i in range(qtd):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            budget = self.make_budget(**kwargs)
+            budgets.append(budget)
+        return budgets
+
+class BudgetTestBase(TestCase, BudgetMixin):
+    def setUp(self) -> None:
+        return super().setUp()
