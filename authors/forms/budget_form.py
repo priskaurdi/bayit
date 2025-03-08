@@ -18,9 +18,12 @@ class AuthorBudgetForm(forms.ModelForm):
 
     class Meta:
         model = Budget
-        fields = 'title', 'description', 'preparation_time', \
-            'preparation_time_unit', 'servings', 'servings_unit', \
-            'preparation_steps', 'cover'
+        fields = [
+            'title', 'description', 'slug', 'equipment_brand', 'equipment_model',
+            'equipment_btus', 'preparation_time', 'preparation_time_unit',
+            'preparation_steps', 'preparation_steps_is_html', 'scheduled_date',
+            'scheduled_time', 'is_published', 'cover'
+        ]
         widgets = {
             'cover': forms.FileInput(
                 attrs={
@@ -29,14 +32,15 @@ class AuthorBudgetForm(forms.ModelForm):
             ),
             'servings_unit': forms.Select(
                 choices=(
-                    ('Porções', 'Porções'),
-                    ('Pedaços', 'Pedaços'),
-                    ('Pessoas', 'Pessoas'),
+                    ('Cômodo', 'Cômodo'),
+                    ('Salão', 'Salão'),
+                    ('Sala', 'Sala'),
+                    ('Consultório', 'Consultório'),
                 ),
             ),
             'preparation_time_unit': forms.Select(
                 choices=(
-                    ('Minutos', 'Minutos'),
+                    ('Dias', 'Dias'),
                     ('Horas', 'Horas'),
                 ),
             ),

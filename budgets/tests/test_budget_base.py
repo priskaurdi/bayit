@@ -48,36 +48,36 @@ class BudgetMixin:
         zipcode="00000-000",
         status="Pendente",
     ):
-    if category_data is None:
-        category_data = {}
+        if category_data is None:
+            category_data = {}
 
-    if author_data is None:
-        author_data = {}
+        if author_data is None:
+            author_data = {}
 
-    return Budget.objects.create(
-        category=self.make_category(**category_data),
-        author=self.make_author(**author_data),
-        title=title,
-        description=description,
-        slug=slug,
-        equipment_brand=equipment_brand,
-        equipment_model=equipment_model,
-        equipment_btus=equipment_btus,
-        preparation_time=preparation_time,
-        preparation_time_unit=preparation_time_unit,
-        preparation_steps=preparation_steps,
-        preparation_steps_is_html=preparation_steps_is_html,
-        scheduled_date=scheduled_date,
-        scheduled_time=scheduled_time,
-        is_published=is_published,
-        street=street,
-        number=number,
-        neighborhood=neighborhood,
-        city=city,
-        state=state,
-        zipcode=zipcode,
-        status=status,
-    )
+        return Budget.objects.create(
+            category=self.make_category(**category_data),
+            author=self.make_author(**author_data),
+            title=title,
+            description=description,
+            slug=slug,
+            equipment_brand=equipment_brand,
+            equipment_model=equipment_model,
+            equipment_btus=equipment_btus,
+            preparation_time=preparation_time,
+            preparation_time_unit=preparation_time_unit,
+            preparation_steps=preparation_steps,
+            preparation_steps_is_html=preparation_steps_is_html,
+            scheduled_date=scheduled_date,
+            scheduled_time=scheduled_time,
+            is_published=is_published,
+            street=street,
+            number=number,
+            neighborhood=neighborhood,
+            city=city,
+            state=state,
+            zipcode=zipcode,
+            status=status,
+        )
 
     
     def make_budget_in_batch(self, qtd=10):

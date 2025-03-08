@@ -18,9 +18,14 @@ class BudgetModelTest(BudgetTestBase):
             slug='budget-slug-for-no-defaults',
             equipment_brand='Marca',
             equipment_model='Modelo',
-            equipment_btus='BTUs',
+            equipment_btus=1500,  # Corrigido para número, conforme make_budget
             preparation_time=10,
+            preparation_time_unit='horas',  # Adicionado campo ausente
             preparation_steps='Budget Preparation Steps',
+            preparation_steps_is_html=False,  # Adicionado campo ausente
+            scheduled_date='2025-03-10',  # Adicionado campo ausente
+            scheduled_time='10:00',  # Adicionado campo ausente
+            is_published=False,  # Explicitamente definido
         )
         budget.full_clean()
         budget.save()
