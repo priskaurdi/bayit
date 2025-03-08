@@ -595,3 +595,124 @@ a {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
 }
+
+.carousel-item img {
+    max-height: 45rem; /* 400px / 16 / 25rem; /* 500px / 16 = 31.25rem */
+    width: 100%; /* Mantém a largura total do container */
+    object-fit: cover; /* Ajusta a imagem para preencher a área */
+}
+
+
+.carousel {
+    padding: 0; /* Remove padding extra */
+    margin: 0 auto; /* Centraliza */
+    max-width: 110rem; /* 1280px / 16 */
+}
+
+.carousel-caption h5 {
+    font-size: 4rem; /* Ajuste o tamanho do título */
+    font-weight: bold;
+    color: #fff; /* Muda a cor para branco */
+    text-transform: uppercase;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Adiciona sombra no texto */
+}
+
+.carousel-caption p {
+    font-size: 2rem; /* Ajuste o tamanho do parágrafo */
+    font-weight: 400;
+    color: #f8f9fa; /* Cor clara para melhor contraste */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Suaviza o texto no fundo */
+}
+
+/* ========= SEÇÃO MISSÃO ========= */
+.missao {
+    background-color: #f8f9fa; /* Cor de fundo suave */
+    padding: 30px 0;
+}
+
+.missao img {
+    max-height: 650px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.missao h2 {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.missao p {
+    font-size: 2rem;
+    color: #666;
+    line-height: 1.3;
+    text-align: justify; /* Justifica o texto */
+}
+
+.missao .btn {
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.missao .btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.missao .btn-secondary {
+    background-color: #343a40;
+    border: none;
+}
+
+/* ========= SEÇÃO NOSSOS SERVIÇOS ========= */
+.servicos {
+    background-color: #fff;
+    padding: 5px 0;
+}
+
+.servicos h2 {
+    font-size: 6rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.servicos .servico-item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.servicos .icone {
+    background-color: #007bff;
+    color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100px; /* Define largura fixa */
+    height: 100px; /* Define altura fixa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.servicos .icone i {
+    font-size: 4rem; /* Garante que todos os ícones tenham o mesmo tamanho */
+}
+
+
+.servicos h3 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.servicos p {
+    font-size: 2rem;
+    color: #666;
+    line-height: 1.5;
+}
+
