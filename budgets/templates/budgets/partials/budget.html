@@ -80,28 +80,25 @@ se for o autor da solicitação ou o staff
     {% if user == budget.author or user.is_staff %}
         <div class="budget-meta-container">
             <div class="budget-meta budget-preparation">
-                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-up"></i> {% translate 'Preparation' %}</h3>
+                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-up"></i> {% translate 'Instalação em:' %}</h3>
                 <div class="budget-meta-text">
                     {{ budget.preparation_time }} {{ budget.preparation_time_unit }}
                 </div>
             </div>
             <div class="budget-meta budget-servings">
-                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-down"></i> {% translate 'Servings' %}</h3>
+                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-down"></i> {% translate 'Local de Instalação:' %}</h3>
                 <div class="budget-meta-text">
                     {{ budget.servings }} {{ budget.servings_unit }}
                 </div>
             </div>
-        </div>
-
-        <div class="budget-meta-container">
             <div class="budget-meta budget-scheduled">
-                <h3 class="budget-meta-title"><i class="fas fa-calendar-check"></i> {% translate 'Agendado' %}</h3>
+                <h3 class="budget-meta-title"><i class="fas fa-calendar-check"></i> {% translate 'Agendado para:' %}</h3>
                 <div class="budget-meta-text">
                     {{ budget.scheduled_date|date:"d/m/Y" }} às {{ budget.scheduled_time }}
                 </div>
             </div>
             <div class="budget-meta budget-status">
-                <h3 class="budget-meta-title"><i class="fas fa-tasks"></i> {% translate 'Status' %}</h3>
+                <h3 class="budget-meta-title"><i class="fas fa-tasks"></i> {% translate 'Status:' %}</h3>
                 <div class="budget-meta-text">
                     {{ budget.status }}
                 </div>
