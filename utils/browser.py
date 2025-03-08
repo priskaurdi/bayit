@@ -7,8 +7,9 @@ from selenium.webdriver.chrome.service import Service
 
 ROOT_PATH = Path(__file__).parent.parent
 CHROMEDRIVER_NAME = 'chromedriver'
-CHROMEDRIVER_PATH = ROOT_PATH / 'bin' / CHROMEDRIVER_NAME
+#CHROMEDRIVER_PATH = ROOT_PATH / 'bin' / CHROMEDRIVER_NAME
 
+CHROMEDRIVER_PATH = r"C://Users/Priscila/Desktop/Bayit/bin/chromedriver.exe"
 
 def make_chrome_browser(*options):
     chrome_options = webdriver.ChromeOptions()

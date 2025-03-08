@@ -1,7 +1,11 @@
-from django.contrib.auth.models import User
-from django.db import models
+import random
+import string
 
-# Create your models here.
+from django.contrib.auth.models import User
+#import uuid
+from django.db import models
+from django.utils.text import slugify
+
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -12,11 +16,12 @@ class Category(models.Model):
 class Budget(models.Model):
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     service_type = models.CharField(max_length=50, choices=[
         ('Manutenção', 'Manutenção'),
         ('Instalação', 'Instalação'),
         ('Limpeza', 'Limpeza'),
+        ('Elétrica', 'Elétrica'),
     ])
     scheduled_date = models.DateField()
     scheduled_time = models.TimeField()
@@ -26,7 +31,6 @@ class Budget(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=2)
     zipcode = models.CharField(max_length=10)
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='budget')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     equipment_brand = models.CharField(max_length=50)
@@ -49,13 +53,18 @@ class Budget(models.Model):
         ('Concluído', 'Concluído'),
         ('Cancelado', 'Cancelado'),
     ], default='Pendente')
-    #service_provider = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='provided_services')
-    #tags = models.ManyToManyField('Tag', blank=True)
-    cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/',  blank=True, default='')
+    cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/', blank=True, default='')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Executa apenas se o campo 'slug' estiver vazio
+            slug_base = slugify(self.title)  # Gera o slug com base no título
+            random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
+            self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
+        super().save(*args, **kwargs)
 
     def __str__(self):
-            return self.title
-    
+        return self.title
+
 
 
 # class Tag(models.Model):

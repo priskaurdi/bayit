@@ -10,10 +10,10 @@ class BudgetMixin:
     def make_author(
         self,
         first_name='aluno',
-        last_name='univesp',
-        username='alunounivesp',
-        password='@luno123',
-        email='aluno@univesp.br',
+        last_name='engenheiro',
+        username='alunoengenho',
+        password='@lunoengenho',
+        email='engenho@univesp.br',
     ):
         return User.objects.create_user(
             first_name=first_name,
@@ -29,7 +29,6 @@ class BudgetMixin:
         author_data=None,
         title='Budget Title',
         description='Budget Description',
-        slug='budget-slug',
         equipment_brand='Marca',
         equipment_model='Modelo',
         equipment_btus=1500,
@@ -63,7 +62,6 @@ class BudgetMixin:
             author=self.make_author(**author_data),
             title=title,
             description=description,
-            slug=slug,
             equipment_brand=equipment_brand,
             equipment_model=equipment_model,
             equipment_btus=equipment_btus,
@@ -87,15 +85,15 @@ class BudgetMixin:
             budget_detail=budget_detail,
         )
 
-    
     def make_budget_in_batch(self, qtd=10):
         budgets = []
         for i in range(qtd):
-            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            kwargs = { 'author_data': {'username': f'u{i}'}}
             budget = self.make_budget(**kwargs)
             budgets.append(budget)
         return budgets
 
 class BudgetTestBase(TestCase, BudgetMixin):
     def setUp(self) -> None:
+        User.objects.all().delete()
         return super().setUp()

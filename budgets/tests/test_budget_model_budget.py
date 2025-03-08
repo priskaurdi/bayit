@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 from parameterized import parameterized
 
 from .test_budget_base import Budget, BudgetTestBase
@@ -15,8 +16,7 @@ class BudgetModelTest(BudgetTestBase):
             author=self.make_author(username='newuser'),
             title='Budget Title',
             description='Budget Description',
-            slug='budget-slug-for-no-defaults',
-            service_type='limpeza',  # Corrigido: Adicionado valor obrigatório
+            service_type='Limpeza',  # Corrigido: Adicionado valor obrigatório
             scheduled_date='2025-03-10',  # Corrigido: Adicionado valor obrigatório
             scheduled_time='10:00',  # Corrigido: Adicionado valor obrigatório
             street='Rua Exemplo',  # Corrigido: Adicionado valor obrigatório
@@ -78,3 +78,19 @@ class BudgetModelTest(BudgetTestBase):
             str(self.budget), needed,
             msg=f'Budget string representation must be "{needed}" but "{str(self.budget)}" was received.'
         )
+
+        
+    def test_budget_slug_is_generated_correctly(self):
+        title = 'Teste de Orçamento'
+        budget = self.make_budget(title=title)
+
+        # Gera o slug esperado (parte inicial)
+        expected_slug_base = slugify(title)
+
+        # Verifica se o slug começa com a versão slugificada do título
+        self.assertTrue(budget.slug.startswith(expected_slug_base))
+
+        # Verifica se há um sufixo aleatório de 5 caracteres após o slug base
+        slug_parts = budget.slug.split('-')
+        self.assertEqual(len(slug_parts), 4)  # Deve ter duas partes (base + random)
+        self.assertEqual(len(slug_parts[1]), 2)  # O sufixo deve ter exatamente 5 caracteres

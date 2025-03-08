@@ -32,10 +32,10 @@ class BudgetSearchViewTest(BudgetTestBase):
         title2 = 'This is budget two'
 
         budget1 = self.make_budget(
-            slug='one', title=title1, author_data={'username': 'one'}
+            title=title1, author_data={'username': 'one'}
         )
         budget2 = self.make_budget(
-            slug='two', title=title2, author_data={'username': 'two'}
+            title=title2, author_data={'username': 'two'}
         )
 
         search_url = reverse('budgets:search')

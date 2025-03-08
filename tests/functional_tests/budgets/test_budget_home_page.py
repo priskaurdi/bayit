@@ -12,7 +12,7 @@ class BudgetHomePageFunctionalTest(BudgetBaseFunctionalTest):
     def test_budget_home_page_without_budgets_not_found_message(self):
         self.browser.get(self.live_server_url)
         body = self.browser.find_element(By.TAG_NAME, 'body')
-        self.assertIn('No budgets found here 🥲', body.text)
+        self.assertIn('No budgets found here.', body.text)
     
     @patch('budgets.views.PER_PAGE', new=2)
     def test_budget_search_input_can_find_correct_budgets(self):

@@ -11,7 +11,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
         )
 
     def fill_form_dummy_data(self, form):
-
         fields = form.find_elements(By.TAG_NAME, 'input')
 
         for field in fields:
