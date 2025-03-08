@@ -38,15 +38,19 @@ class BudgetMixin:
         preparation_steps='Budget Preparation Steps',
         preparation_steps_is_html=False,
         scheduled_date='2025-03-10',
-        scheduled_time='10:00',
+        scheduled_time='10:00:00',
+        servings = 1,
+        servings_unit = 'comodo',
         is_published=True,
         street="Rua Exemplo",
         number="123",
         neighborhood="Bairro Exemplo",
         city="Cidade Exemplo",
         state="SP",
-        zipcode="00000-000",
+        zipcode="00000000",
         status="Pendente",
+        service_type='limpeza',
+        budget_detail='detalhe e orçamento',
     ):
         if category_data is None:
             category_data = {}
@@ -69,6 +73,8 @@ class BudgetMixin:
             preparation_steps_is_html=preparation_steps_is_html,
             scheduled_date=scheduled_date,
             scheduled_time=scheduled_time,
+            servings = servings,
+            servings_unit = servings_unit,
             is_published=is_published,
             street=street,
             number=number,
@@ -77,6 +83,8 @@ class BudgetMixin:
             state=state,
             zipcode=zipcode,
             status=status,
+            service_type=service_type,
+            budget_detail=budget_detail,
         )
 
     

@@ -16,16 +16,25 @@ class BudgetModelTest(BudgetTestBase):
             title='Budget Title',
             description='Budget Description',
             slug='budget-slug-for-no-defaults',
+            service_type='limpeza',  # Corrigido: Adicionado valor obrigatório
+            scheduled_date='2025-03-10',  # Corrigido: Adicionado valor obrigatório
+            scheduled_time='10:00',  # Corrigido: Adicionado valor obrigatório
+            street='Rua Exemplo',  # Corrigido: Adicionado valor obrigatório
+            number='123',  # Corrigido: Adicionado valor obrigatório
+            neighborhood='Bairro Teste',  # Corrigido: Adicionado valor obrigatório
+            city='Cidade Teste',  # Corrigido: Adicionado valor obrigatório
+            state='SP',  # Corrigido: Adicionado valor obrigatório
+            zipcode='12345-678',  # Corrigido: Adicionado valor obrigatório
             equipment_brand='Marca',
             equipment_model='Modelo',
-            equipment_btus=1500,  # Corrigido para número, conforme make_budget
+            equipment_btus=9000,
+            budget_detail='Detalhes do orçamento',  # Corrigido: Adicionado valor obrigatório
+            servings=2,  # Corrigido: Adicionado valor obrigatório
+            servings_unit='Porções',  # Corrigido: Adicionado valor obrigatório
             preparation_time=10,
-            preparation_time_unit='horas',  # Adicionado campo ausente
+            preparation_time_unit='consultorios',
             preparation_steps='Budget Preparation Steps',
-            preparation_steps_is_html=False,  # Adicionado campo ausente
-            scheduled_date='2025-03-10',  # Adicionado campo ausente
-            scheduled_time='10:00',  # Adicionado campo ausente
-            is_published=False,  # Explicitamente definido
+            is_published=False
         )
         budget.full_clean()
         budget.save()
@@ -58,11 +67,14 @@ class BudgetModelTest(BudgetTestBase):
 
     def test_budget_string_representation(self):
         needed = 'Testing Representation'
-        self.budget.title = needed
+        self.budget = self.make_budget(  # Garantindo que os campos obrigatórios sejam passados
+            title=needed,
+            service_type='Instalação',  # Adicionado para evitar erro
+            budget_detail='Orçamento teste',  # Adicionado para evitar erro
+        )
         self.budget.full_clean()
         self.budget.save()
         self.assertEqual(
             str(self.budget), needed,
-            msg=f'Budget string representation must be '
-                f'"{needed}" but "{str(self.budget)}" was received.'
+            msg=f'Budget string representation must be "{needed}" but "{str(self.budget)}" was received.'
         )
