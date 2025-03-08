@@ -32,34 +32,53 @@ class BudgetMixin:
         slug='budget-slug',
         equipment_brand='Marca',
         equipment_model='Modelo',
-        equipment_btus='1500',
+        equipment_btus=1500,
         preparation_time=10,
-        preparation_time_unit ='horas',
+        preparation_time_unit='horas',
         preparation_steps='Budget Preparation Steps',
         preparation_steps_is_html=False,
+        scheduled_date='2025-03-10',
+        scheduled_time='10:00',
         is_published=True,
+        street="Rua Exemplo",
+        number="123",
+        neighborhood="Bairro Exemplo",
+        city="Cidade Exemplo",
+        state="SP",
+        zipcode="00000-000",
+        status="Pendente",
     ):
-        if category_data is None:
-            category_data = {}
+    if category_data is None:
+        category_data = {}
 
-        if author_data is None:
-            author_data = {}
+    if author_data is None:
+        author_data = {}
 
-        return Budget.objects.create(
-            category=self.make_category(**category_data),
-            author=self.make_author(**author_data),
-            title=title,
-            description=description,
-            slug=slug,
-            equipment_brand=equipment_brand,
-            equipment_model=equipment_model,
-            equipment_btus=equipment_btus,
-            preparation_time=preparation_time,
-            preparation_time_unit=preparation_time_unit,
-            preparation_steps=preparation_steps,
-            preparation_steps_is_html=preparation_steps_is_html,
-            is_published=is_published,
-        )
+    return Budget.objects.create(
+        category=self.make_category(**category_data),
+        author=self.make_author(**author_data),
+        title=title,
+        description=description,
+        slug=slug,
+        equipment_brand=equipment_brand,
+        equipment_model=equipment_model,
+        equipment_btus=equipment_btus,
+        preparation_time=preparation_time,
+        preparation_time_unit=preparation_time_unit,
+        preparation_steps=preparation_steps,
+        preparation_steps_is_html=preparation_steps_is_html,
+        scheduled_date=scheduled_date,
+        scheduled_time=scheduled_time,
+        is_published=is_published,
+        street=street,
+        number=number,
+        neighborhood=neighborhood,
+        city=city,
+        state=state,
+        zipcode=zipcode,
+        status=status,
+    )
+
     
     def make_budget_in_batch(self, qtd=10):
         budgets = []
