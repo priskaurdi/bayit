@@ -1,6 +1,7 @@
 {% load i18n %}
 
 <div class="budget budget-list-item">
+    
     {% if budget.cover %}
         <div class="budget-cover">
             <a href="{{ budget.get_absolute_url }}">
@@ -8,6 +9,7 @@
             </a>
         </div>
     {% endif %}
+
     <div class="budget-title-container">
         <h2 class="budget-title">
             <a href="{{ budget.get_absolute_url }}">
@@ -17,25 +19,20 @@
     </div>
 
     <div class="budget-author">
-
         {% if budget.author is not None %}
             <span class="budget-author-item">
-                
                 {% if budget.author.profile %}
                     <a href="{% url 'authors:profile' budget.author.profile.id %}">
                 {% endif %}
-
                 <i class="fas fa-user"></i>
                 {% if budget.author.first_name %}
                     {{ budget.author.first_name }} {{ budget.author.last_name }}
                 {% else %}
                     {{ budget.author.username }}
                 {% endif %}
-
                 {% if budget.author.profile %}
                     </a>
                 {% endif %}
-
             </span>
         {% endif %}
 
@@ -63,35 +60,6 @@
         <p>{{ budget.description }}</p>
     </div>
 
-    <div class="budget-meta-container">
-        <div class="budget-meta budget-preparation">
-            <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-up"></i> {% translate 'Preparation' %}</h3>
-            <div class="budget-meta-text">
-                {{ budget.preparation_time }} {{ budget.preparation_time_unit }}
-            </div>
-        </div>
-        <div class="budget-meta budget-servings">
-            <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-down"></i> {% translate 'Servings' %}</h3>
-            <div class="budget-meta-text">
-                {{ budget.servings }} {{ budget.servings_unit }}
-            </div>
-        </div>
-    </div>
-
-    <div class="budget-meta-container">
-        <div class="budget-meta budget-scheduled">
-            <h3 class="budget-meta-title"><i class="fas fa-calendar-check"></i> {% translate 'Agendado' %}</h3>
-            <div class="budget-meta-text">
-                {{ budget.scheduled_date|date:"d/m/Y" }} às {{ budget.scheduled_time }}
-            </div>
-        </div>
-        <div class="budget-meta budget-status">
-            <h3 class="budget-meta-title"><i class="fas fa-tasks"></i> {% translate 'Status' %}</h3>
-            <div class="budget-meta-text">
-                {{ budget.status }}
-            </div>
-        </div>
-    </div>
 
     {% if is_detail_page is not True %}
         <footer class="budget-footer">
@@ -101,73 +69,77 @@
             </a>
         </footer>
     {% endif %}
+</div>
 
-    {% if is_detail_page is True %}
+    {% comment %} <!-- ==========  ========== -->
+Restrição de visualização da mensagem na home, esta parte deve ser mostrada
+se for o autor da solicitação ou o staff 
+<!-- ==========  ========== --> {% endcomment %}
+
+{% if is_detail_page is True %}
+    {% if user == budget.author or user.is_staff %}
+        <div class="budget-meta-container">
+            <div class="budget-meta budget-preparation">
+                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-up"></i> {% translate 'Preparation' %}</h3>
+                <div class="budget-meta-text">
+                    {{ budget.preparation_time }} {{ budget.preparation_time_unit }}
+                </div>
+            </div>
+            <div class="budget-meta budget-servings">
+                <h3 class="budget-meta-title"><i class="fa-solid fa-temperature-arrow-down"></i> {% translate 'Servings' %}</h3>
+                <div class="budget-meta-text">
+                    {{ budget.servings }} {{ budget.servings_unit }}
+                </div>
+            </div>
+        </div>
+
+        <div class="budget-meta-container">
+            <div class="budget-meta budget-scheduled">
+                <h3 class="budget-meta-title"><i class="fas fa-calendar-check"></i> {% translate 'Agendado' %}</h3>
+                <div class="budget-meta-text">
+                    {{ budget.scheduled_date|date:"d/m/Y" }} às {{ budget.scheduled_time }}
+                </div>
+            </div>
+            <div class="budget-meta budget-status">
+                <h3 class="budget-meta-title"><i class="fas fa-tasks"></i> {% translate 'Status' %}</h3>
+                <div class="budget-meta-text">
+                    {{ budget.status }}
+                </div>
+            </div>
+        </div>
+
         <div class="preparation-steps">
             {% if budget.preparation_steps_is_html is True %}
                 {{ budget.preparation_steps|safe }}
             {% else %}
                 {{ budget.preparation_steps|linebreaksbr }}
             {% endif %}
-
-            {% if budget.tags.all %}
-                <p>
-                    Tags:
-                    {% for tag in budget.tags.all %}
-                        <a href="{% url 'budgets:tag' tag.slug %}">
-                            {{ tag.name }}
-                        </a>, 
-                    {% endfor %}
-                </p>
-            {% endif %}
         </div>
-    {% endif %}
 
-    {% if is_detail_page is True %}
         <div class="budget-details">
-            {% if budget.budget_detail_is_html is True %}
-                {{ budget.budget_detail|safe }}
-            {% else %}
-                {{ budget.budget_detail|linebreaksbr }}
-            {% endif %}
+            <div class="author-details">
+                <h3>Detalhes do Cliente</h3>
+                <p>Nome: {{ budget.author.first_name }} {{ budget.author.last_name }}</p>
+                <p>Telefone: {{ budget.author.phone }}</p>
+                <p>Email: {{ budget.author.email }}</p>
+            </div>
 
-            {% if user == budget.author or user.is_staff %}
-                <div class="author-details">
-                    <h3>Detalhes do Cliente</h3>
-                    <p>Nome: {{ budget.author.first_name }} {{ budget.author.last_name }}</p>
-                    <p>Telefone: {{ budget.author.phone }}</p>
-                    <p>Email: {{ budget.author.email }}</p>
-                </div>
+            <div class="address-details">
+                <h3>Endereço</h3>
+                <p>Rua: {{ budget.address.street }}, {{ budget.address.number }}</p>
+                <p>Bairro: {{ budget.address.neighborhood }}</p>
+                <p>Cidade: {{ budget.address.city }}, {{ budget.address.state }}</p>
+                <p>CEP: {{ budget.address.zipcode }}</p>
+            </div>
 
-                <div class="address-details">
-                    <h3>Endereço</h3>
-                    <p>Rua: {{ budget.address.street }}, {{ budget.address.number }}</p>
-                    <p>Bairro: {{ budget.address.neighborhood }}</p>
-                    <p>Cidade: {{ budget.address.city }}, {{ budget.address.state }}</p>
-                    <p>CEP: {{ budget.address.zipcode }}</p>
-                </div>
-
-                <div class="equipment-details">
-                    <h3>Detalhes do Equipamento</h3>
-                    <p>Marca: {{ budget.equipment.brand }}</p>
-                    <p>Modelo: {{ budget.equipment.model }}</p>
-                    <p>BTUs: {{ budget.equipment.btus }}</p>
-                </div>
-            {% else %}
-                <p>Você não tem permissão para ver esses detalhes.</p>
-            {% endif %}
-
-            {% if budget.tags.all %}
-                <p>
-                    Tags:
-                    {% for tag in budget.tags.all %}
-                        <a href="{% url 'budgets:tag' tag.slug %}">
-                            {{ tag.name }}
-                        </a>, 
-                    {% endfor %}
-                </p>
-            {% endif %}
+            <div class="equipment-details">
+                <h3>Detalhes do Equipamento</h3>
+                <p>Marca: {{ budget.equipment.brand }}</p>
+                <p>Modelo: {{ budget.equipment.model }}</p>
+                <p>BTUs: {{ budget.equipment.btus }}</p>
+            </div>
         </div>
+    {% else %}
+        <p>Para acessar os detalhes da mensagem, faça seu <a href="{% url 'authors:login' %}">login</a>.</p>
     {% endif %}
-
-</div>
+{% endif %}
