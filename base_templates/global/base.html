@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ html_language }}">
+
+<head>
+    {% include 'global/partials/head.html' %}
+    <title>{% block title %}{% endblock title %} Orçamentos</title>
+</head>
+
+<body>
+    {% include 'global/partials/menu.html' %}
+    {% include 'global/partials/header.html' %}
+    {% include 'global/partials/search.html' %}
+    
+    <a class="whatsapp-link" href="https://wa.me/5511970155218" target="_blank">
+        <img src="{% static 'logo_bayit/whatsapp.png' %}" alt="WhatsApp" class="fa-whatsapp">
+    </a>
+
+    
+
+    <main class="main-content-container">
+        {% block content %}{% endblock content %}
+        {% include 'global/partials/pagination.html' %}
+    </main>
+
+    {% include 'global/partials/footer.html' %}
+
+    <script src="{% static 'global/js/scripts.js' %}"></script>
+</body>
+
+</html>
