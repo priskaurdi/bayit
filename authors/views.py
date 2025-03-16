@@ -66,7 +66,7 @@ def login_create(request):
     else:
         messages.error(request, 'Invalid username or password')
 
-    return redirect(login_url)
+    return redirect(reverse('authors:dashboard'))
 
 
 @login_required(login_url='authors:login', redirect_field_name='next')
@@ -82,3 +82,110 @@ def logout_view(request):
     messages.success(request, 'Logged out successfully')
     logout(request)
     return redirect(reverse('authors:login'))
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard(request):
+    budgets = Budget.objects.filter(
+        is_published=False,
+        author=request.user
+    )
+    return render(
+        request,
+        'authors/pages/dashboard.html',
+        context={
+            'budgets': budgets,
+        }
+    )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_budget_edit(request, id):
+    budget = Budget.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+
+    if not budget:
+        raise Http404()
+
+    form = AuthorBudgetForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+        instance=budget
+    )
+
+    if form.is_valid():
+        # Agora, o form é válido e eu posso tentar salvar
+        budget = form.save(commit=False)
+
+        budget.author = request.user
+        budget.preparation_steps_is_html = False
+        budget.is_published = False
+
+        budget.save()
+
+        messages.success(request, 'Sua receita foi salva com sucesso!')
+        return redirect(reverse('authors:dashboard_budget_edit', args=(id,)))
+
+    return render(
+        request,
+        'authors/pages/dashboard_budget.html',
+        context={
+            'form': form
+        }
+    )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_budget_new(request):
+    form = AuthorBudgetForm(
+        data=request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        budget: Budget = form.save(commit=False)
+
+        budget.author = request.user
+        budget.preparation_steps_is_html = False
+        budget.is_published = False
+
+        budget.save()
+
+        messages.success(request, 'Salvo com sucesso!')
+        return redirect(
+            reverse('authors:dashboard_budget_edit', args=(budget.id,))
+        )
+
+    return render(
+        request,
+        'authors/pages/dashboard_budget.html',
+        context={
+            'form': form,
+            'form_action': reverse('authors:dashboard_budget_new')
+        }
+    )
+
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dashboard_budget_delete(request):
+    if not request.POST:
+        raise Http404()
+
+    POST = request.POST
+    id = POST.get('id')
+
+    budget = Budget.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+
+    if not budget:
+        raise Http404()
+
+    budget.delete()
+    messages.success(request, 'Deleted successfully.')
+    return redirect(reverse('authors:dashboard'))
