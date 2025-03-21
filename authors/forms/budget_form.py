@@ -20,10 +20,9 @@ class AuthorBudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
         fields = [
-            'title', 'description', 'slug', 'equipment_brand', 'equipment_model',
+            'title', 'description', 'equipment_brand', 'equipment_model',
             'equipment_btus', 'preparation_time', 'preparation_time_unit',
-            'preparation_steps', 'preparation_steps_is_html', 'scheduled_date',
-            'scheduled_time', 'is_published', 'cover'
+            'servings', 'servings_unit', 'preparation_steps', 'cover'
         ]
         widgets = {
             'cover': forms.FileInput(
