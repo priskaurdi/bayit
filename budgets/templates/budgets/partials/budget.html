@@ -69,7 +69,7 @@
             </a>
         </footer>
     {% endif %}
-</div>
+
 
     {% comment %} <!-- ==========  ========== -->
 Restrição de visualização da mensagem na home, esta parte deve ser mostrada
@@ -113,30 +113,39 @@ se for o autor da solicitação ou o staff
             {% endif %}
         </div>
 
-        <div class="budget-details">
-            <div class="author-details">
-                <h3>Detalhes do Cliente</h3>
-                <p>Nome: {{ budget.author.first_name }} {{ budget.author.last_name }}</p>
-                <p>Telefone: {{ budget.author.phone }}</p>
-                <p>Email: {{ budget.author.email }}</p>
-            </div>
 
-            <div class="address-details">
-                <h3>Endereço</h3>
-                <p>Rua: {{ budget.address.street }}, {{ budget.address.number }}</p>
-                <p>Bairro: {{ budget.address.neighborhood }}</p>
-                <p>Cidade: {{ budget.address.city }}, {{ budget.address.state }}</p>
-                <p>CEP: {{ budget.address.zipcode }}</p>
-            </div>
+            <div class="budget-details">
+                <div class="author-details">
+                    <h3 class="budget-meta-title">Detalhes do Cliente</h3>
+                    <div class="budget-meta-text">
+                        <p>Nome: {{ budget.author.first_name }} {{ budget.author.last_name }}</p>
+                        <p>Telefone: {{ budget.author.phone }}</p>
+                        <p>Email: {{ budget.author.email }}</p>
+                    </div>
+                </div>
 
-            <div class="equipment-details">
-                <h3>Detalhes do Equipamento</h3>
-                <p>Marca: {{ budget.equipment.brand }}</p>
-                <p>Modelo: {{ budget.equipment.model }}</p>
-                <p>BTUs: {{ budget.equipment.btus }}</p>
+                <div class="address-details">
+                    <h3 class="budget-meta-title">Endereço</h3>
+                    <div class="budget-meta-text">
+                        <p>Rua: {{ budget.address.street }}, {{ budget.address.number }}</p>
+                        <p>Bairro: {{ budget.address.neighborhood }}</p>
+                        <p>Cidade: {{ budget.address.city }}, {{ budget.address.state }}</p>
+                        <p>CEP: {{ budget.address.zipcode }}</p>
+                    </div>
+                </div>
+
+                <div class="equipment-details">
+                    <h3 class="budget-meta-title">Equipamento</h3>
+                    <div class="budget-meta-text">
+                        <p>Marca: {{ budget.equipment.brand }}</p>
+                        <p>Modelo: {{ budget.equipment.model }}</p>
+                        <p>BTUs: {{ budget.equipment.btus }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
+    </div>
     {% else %}
         <p>Para acessar os detalhes da mensagem, faça seu <a href="{% url 'authors:login' %}">login</a>.</p>
     {% endif %}
 {% endif %}
+</div>
