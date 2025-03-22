@@ -129,7 +129,7 @@ def dashboard_budget_edit(request, id):
 
         budget.save()
 
-        messages.success(request, 'Sua receita foi salva com sucesso!')
+        messages.success(request, 'Seu orçamento foi salvo com sucesso!')
         return redirect(reverse('authors:dashboard_budget_edit', args=(id,)))
 
     return render(
