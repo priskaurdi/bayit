@@ -13,12 +13,12 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path(
         'dashboard/budget/new/',
-        views.dashboard_budget_new,
+        views.DashboardBudget.as_view(),
         name='dashboard_budget_new'
     ),
     path(
         'dashboard/budget/delete/',
-        views.dashboard_budget_delete,
+        views.DashboardBudgetDelete.as_view(),
         name='dashboard_budget_delete'
     ),
     path(
