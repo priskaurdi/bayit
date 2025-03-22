@@ -10,7 +10,7 @@ from .test_budget_base import BudgetTestBase
 class BudgetHomeViewTest(BudgetTestBase):
     def test_budget_home_view_function_is_correct(self):
         view = resolve(reverse('budgets:home'))
-        self.assertIs(view.func, views.home)
+        self.assertIs(view.func.view_class, views.BudgetListViewHome)
 
     def test_budget_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('budgets:home'))

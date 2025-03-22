@@ -10,11 +10,11 @@ class BudgetDetailViewTest(BudgetTestBase):
         view = resolve(
             reverse('budgets:budget', kwargs={'id': 1})
         )
-        self.assertIs(view.func, views.budget)
+        self.assertIs(view.func.view_class, views.BudgetDetail)
 
     def test_budget_detail_view_returns_404_if_no_budgets_found(self):
         response = self.client.get(
-            reverse('budgets:budget', kwargs={'id': 1000})
+            reverse('budgets:budget', kwargs={'pk': 1000})
         )
         self.assertEqual(response.status_code, 404)
 
@@ -28,7 +28,7 @@ class BudgetDetailViewTest(BudgetTestBase):
             reverse(
                 'budgets:budget',
                 kwargs={
-                    'id': 1
+                    'pk': 1
                 }
             )
         )
@@ -46,7 +46,7 @@ class BudgetDetailViewTest(BudgetTestBase):
             reverse(
                 'budgets:budget',
                 kwargs={
-                    'id': budget.id
+                    'pk': budget.id
                 }
             )
         )

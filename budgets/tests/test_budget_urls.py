@@ -12,7 +12,7 @@ class BudgetURLsTest(TestCase):
         self.assertEqual(url, '/budgets/category/1/')
 
     def test_budget_detail_url_is_correct(self):
-        url = reverse('budgets:budget', kwargs={'id': 1})
+        url = reverse('budgets:budget', kwargs={'pk': 1})
         self.assertEqual(url, '/budgets/1/')
     
     def test_budget_search_url_is_correct(self):
