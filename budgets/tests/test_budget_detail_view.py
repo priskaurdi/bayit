@@ -8,7 +8,7 @@ from .test_budget_base import BudgetTestBase
 class BudgetDetailViewTest(BudgetTestBase):
     def test_budget_detail_view_function_is_correct(self):
         view = resolve(
-            reverse('budgets:budget', kwargs={'id': 1})
+            reverse('budgets:budget', kwargs={'pk': 1})
         )
         self.assertIs(view.func.view_class, views.BudgetDetail)
 

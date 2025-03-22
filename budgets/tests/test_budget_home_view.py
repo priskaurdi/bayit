@@ -23,7 +23,7 @@ class BudgetHomeViewTest(BudgetTestBase):
     def test_budget_home_template_shows_no_budgets_found_if_no_budgets(self):
         response = self.client.get(reverse('budgets:home'))
         self.assertIn(
-            '<h1>No budgets found here 🥲</h1>',
+            '<h1>No budgets found here.</h1>',
             response.content.decode('utf-8')
         )
 
@@ -48,7 +48,7 @@ class BudgetHomeViewTest(BudgetTestBase):
 
         # Check if one budget exists
         self.assertIn(
-            '<h1>No budgets found here 🥲</h1>',
+            '<h1>No budgets found here.</h1>',
             response.content.decode('utf-8')
         )
 
