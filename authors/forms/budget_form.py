@@ -7,7 +7,6 @@ from budgets.models import Budget
 from utils.django_forms import add_attr
 from utils.strings import is_positive_number
 
-#from authors.validators import AuthorBudgetValidator
 
 class AuthorBudgetForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -20,8 +19,8 @@ class AuthorBudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
         fields = [
-            'title', 'description', 'equipment_brand', 'equipment_model',
-            'equipment_btus', 'preparation_time', 'preparation_time_unit',
+            'title', 'description', 'equipment_brand', 'equipment_model', \
+            'equipment_btus', 'preparation_time', 'preparation_time_unit', \
             'servings', 'servings_unit', 'preparation_steps', 'cover'
         ]
         widgets = {

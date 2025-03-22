@@ -21,7 +21,13 @@
                 <p class="help-text">{{ field.help_text }}</p>
                 {% endif %}
 
-                {{ field.errors }}
+                {% if field.errors %}
+                    <div class="errorlist">
+                        {% for error in field.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
