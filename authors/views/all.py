@@ -5,10 +5,9 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from authors.forms import LoginForm, RegisterForm
 from authors.forms.budget_form import AuthorBudgetForm
 from budgets.models import Budget
-
-from .forms import LoginForm, RegisterForm
 
 
 def register_view(request):
@@ -53,7 +52,6 @@ def login_create(request):
         raise Http404()
 
     form = LoginForm(request.POST)
-    login_url = reverse('authors:login')
 
     if form.is_valid():
         authenticated_user = authenticate(
@@ -79,7 +77,7 @@ def logout_view(request):
         return redirect(reverse('authors:login'))
 
     if request.POST.get('username') != request.user.username:
-        messages.error(request, 'Invalid logout request')
+        messages.error(request, 'Invalid logout user')
         return redirect(reverse('authors:login'))
 
     messages.success(request, 'Logged out successfully')
@@ -129,7 +127,7 @@ def dashboard_budget_edit(request, id):
 
         budget.save()
 
-        messages.success(request, 'Seu orçamento foi salvo com sucesso!')
+        messages.success(request, 'Sua receita foi salva com sucesso!')
         return redirect(reverse('authors:dashboard_budget_edit', args=(id,)))
 
     return render(

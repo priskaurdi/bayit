@@ -23,7 +23,7 @@ urlpatterns = [
     ),
     path(
         'dashboard/budget/<int:id>/edit/',
-        views.dashboard_budget_edit,
+        views.DashboardBudget.as_view(),
         name='dashboard_budget_edit'
     ),
 ]

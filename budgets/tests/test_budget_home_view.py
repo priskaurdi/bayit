@@ -70,3 +70,17 @@ class BudgetHomeViewTest(BudgetTestBase):
 
         with patch('budgets.views.PER_PAGE', new=3):
             response = self.client.get(reverse('budgets:home') + '?page=12A')
+            self.assertEqual(
+                response.context['budgets'].number,
+                1
+            )
+            response = self.client.get(reverse('budgets:home') + '?page=2')
+            self.assertEqual(
+                response.context['budgets'].number,
+                2
+            )
+            response = self.client.get(reverse('budgets:home') + '?page=3')
+            self.assertEqual(
+                response.context['budgets'].number,
+                3
+            )

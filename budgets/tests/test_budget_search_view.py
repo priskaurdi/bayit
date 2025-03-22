@@ -8,7 +8,7 @@ from .test_budget_base import BudgetTestBase
 class BudgetSearchViewTest(BudgetTestBase):
     def test_budget_search_uses_correct_view_function(self):
         resolved = resolve(reverse('budgets:search'))
-        self.assertIs(resolved.func, views.search)
+        self.assertIs(resolved.func.view_class, views.BudgetListViewSearch)
 
     def test_budget_search_loads_correct_template(self):
         response = self.client.get(reverse('budgets:search') + '?q=teste')
