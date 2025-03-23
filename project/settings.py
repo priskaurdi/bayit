@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+
+from dotenv import load_dotenv
+
+load_dotenv()  # Carrega variáveis do .env
 from pathlib import Path
 
 from django.contrib.messages import constants
