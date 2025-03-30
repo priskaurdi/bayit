@@ -1,12 +1,18 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
+
+from tag.models import Tag
 
 from .models import Budget, Category
-
-# Register your models here.
 
 
 class CategoryAdmin(admin.ModelAdmin):
     ...
+
+class TagInline(GenericStackedInline):
+    model = Tag
+    fields = 'name',
+    extra = 1
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
@@ -20,6 +26,10 @@ class BudgetAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         "slug": ('title',)
     }
+
+    inlines = [
+        TagInline,
+    ]
 
 
 admin.site.register(Category, CategoryAdmin)

@@ -2,10 +2,14 @@ import random
 import string
 
 from django.contrib.auth.models import User
-#import uuid
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from django.db.models import F, Value
+from django.db.models.functions import Concat
 from django.urls import reverse
 from django.utils.text import slugify
+
+from tag.models import Tag
 
 
 class Category(models.Model):
@@ -13,6 +17,19 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+class BudgetManager(models.Manager):
+    def get_published(self):
+        return self.filter(
+            is_published=True
+        ).annotate(
+            author_full_name=Concat(
+                F('author__first_name'), Value(' '),
+                F('author__last_name'), Value(' ('),
+                F('author__username'), Value(')'),
+            )
+        ).order_by('-id')
+    
 
 class Budget(models.Model):
     title = models.CharField(max_length=65)
@@ -55,13 +72,7 @@ class Budget(models.Model):
         ('Cancelado', 'Cancelado'),
     ], default='Pendente')
     cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/', blank=True, default='')
-
-    def save(self, *args, **kwargs):
-        if not self.slug:  # Executa apenas se o campo 'slug' estiver vazio
-            slug_base = slugify(self.title)  # Gera o slug com base no título
-            random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
-            self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
-        super().save(*args, **kwargs)
+    tags = GenericRelation(Tag, related_query_name='budgets')
 
     def __str__(self):
         return self.title
@@ -69,7 +80,12 @@ class Budget(models.Model):
     def get_absolute_url(self):
         return reverse('budgets:budget', args=(self.id,))
 
-
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Executa apenas se o campo 'slug' estiver vazio
+            slug_base = slugify(self.title)  # Gera o slug com base no título
+            random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
+            self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
+        super().save(*args, **kwargs)
 
 # class Tag(models.Model):
 #     name = models.CharField(max_length=50)
