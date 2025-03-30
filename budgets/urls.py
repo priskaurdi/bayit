@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 
 from . import views
 
@@ -36,5 +36,5 @@ urlpatterns = [
         views.BudgetDetailAPI.as_view(),
         name="budgets_api_v1_detail",
     ),
-    path('__debug__/', include('debug_toolbar.urls')),
+    
 ]
