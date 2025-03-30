@@ -113,6 +113,17 @@ se for o autor da solicitação ou o staff
             {% endif %}
         </div>
 
+        {% if budget.tags.all %}
+                <p>
+                    Tags:
+                    {% for tag in budget.tags.all %}
+                        <a href="{% url 'budgets:tag' tag.slug %}">
+                            {{ tag.name }}
+                        </a>, 
+                    {% endfor %}
+                </p>
+        {% endif %}
+
 
             <div class="budget-details">
                 <div class="author-details">

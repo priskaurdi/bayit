@@ -1,10 +1,12 @@
 import os
 
-from django.db.models import Q
+from django.db.models import F, Q
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from django.http.response import Http404
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
+from tag.models import Tag
 
 #from utils.budgets.factory import make_budget
 from utils.pagination import make_pagination
@@ -12,6 +14,20 @@ from utils.pagination import make_pagination
 from .models import Budget
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
+
+def theory(request, *args, **kwargs):
+    budgets = Budget.objects.values('id', 'title')
+
+    context = {
+        'budgets': budgets
+    }
+
+    return render(
+        request,
+        'budgets/pages/theory.html',
+        context=context
+    )
+
 
 class BudgetListViewBase(ListView):
     model = Budget
@@ -25,6 +41,7 @@ class BudgetListViewBase(ListView):
             is_published=True,
         )
         qs = qs.select_related('author', 'category')
+        qs = qs.prefetch_related('tags')
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -79,6 +96,32 @@ class BudgetListViewCategory(BudgetListViewBase):
             raise Http404()
 
         return qs
+
+
+class BudgetListViewTag(BudgetListViewBase):
+    template_name = 'budgets/pages/tag.html'
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(tags__slug=self.kwargs.get('slug', ''))
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        page_title = Tag.objects.filter(
+            slug=self.kwargs.get('slug', '')
+        ).first()
+
+        if not page_title:
+            page_title = 'No budgets found'
+
+        page_title = f'{page_title} - Tag |'
+
+        ctx.update({
+            'page_title': page_title,
+        })
+
+        return ctx
 
 
 class BudgetListViewSearch(BudgetListViewBase):

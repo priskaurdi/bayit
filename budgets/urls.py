@@ -16,6 +16,11 @@ urlpatterns = [
         views.BudgetListViewSearch.as_view(), 
         name="search"
     ),
+    path(
+        'budgets/tags/<slug:slug>/',
+        views.BudgetListViewTag.as_view(),
+        name="tag"
+    ),
     path( #budgets-category
         'budgets/category/<int:category_id>/', 
         views.BudgetListViewCategory.as_view(), 
@@ -36,5 +41,10 @@ urlpatterns = [
         views.BudgetDetailAPI.as_view(),
         name="budgets_api_v1_detail",
     ),
+    path( #budgets-theory
+        'budgets/theory/',
+        views.theory,
+        name='theory',
+    )
     
 ]
