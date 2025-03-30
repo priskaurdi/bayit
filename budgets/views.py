@@ -1,8 +1,9 @@
 import os
 
 from django.db.models import Q
+from django.forms.models import model_to_dict
+from django.http import JsonResponse
 from django.http.response import Http404
-from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.views.generic import DetailView, ListView
 
 #from utils.budgets.factory import make_budget
@@ -23,6 +24,7 @@ class BudgetListViewBase(ListView):
         qs = qs.filter(
             is_published=True,
         )
+        qs = qs.select_related('author', 'category')
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -40,6 +42,19 @@ class BudgetListViewBase(ListView):
 
 class BudgetListViewHome(BudgetListViewBase):
     template_name = 'budgets/pages/home.html'
+
+
+class BudgetListViewHomeApi(BudgetListViewBase):
+    template_name = 'budgets/pages/home.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        budgets = self.get_context_data()['budgets']
+        budgets_list = budgets.object_list.values()
+
+        return JsonResponse(
+            list(budgets_list),
+            safe=False
+        )
 
 
 class BudgetListViewCategory(BudgetListViewBase):
@@ -115,3 +130,26 @@ class BudgetDetail(DetailView):
         })
 
         return ctx
+    
+
+class BudgetDetailAPI(BudgetDetail):
+    def render_to_response(self, context, **response_kwargs):
+        budget = self.get_context_data()['budget']
+        budget_dict = model_to_dict(budget)
+
+        budget_dict['created_at'] = str(budget.created_at)
+        budget_dict['updated_at'] = str(budget.updated_at)
+
+        if budget_dict.get('cover'):
+            budget_dict['cover'] = self.request.build_absolute_uri() + \
+                budget_dict['cover'].url[1:]
+        else:
+            budget_dict['cover'] = ''
+
+        del budget_dict['is_published']
+        del budget_dict['preparation_steps_is_html']
+
+        return JsonResponse(
+            budget_dict,
+            safe=False,
+        )

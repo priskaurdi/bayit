@@ -6,9 +6,35 @@ from . import views
 app_name = 'budgets'
 
 urlpatterns = [
-    path('', views.BudgetListViewHome.as_view(), name="home"), #budgets-home
-    path('budgets/search/', views.BudgetListViewSearch.as_view(), name="search"), 
-    path('budgets/category/<int:category_id>/', views.BudgetListViewCategory.as_view(), name="category"),
-    path('budgets/<int:pk>/', views.BudgetDetail.as_view(), name="budget"), #budgets-budget
-    
+    path( #budgets-home
+        '', 
+        views.BudgetListViewHome.as_view(), 
+        name="home"
+    ), 
+    path( #budgets-search
+        'budgets/search/', 
+        views.BudgetListViewSearch.as_view(), 
+        name="search"
+    ),
+    path( #budgets-category
+        'budgets/category/<int:category_id>/', 
+        views.BudgetListViewCategory.as_view(), 
+        name="category"
+    ),
+    path( #budgets-budget
+        'budgets/<int:pk>/', 
+        views.BudgetDetail.as_view(), 
+        name="budget"
+    ), 
+    path( #budgets-api
+        'budgets/api/v1/',
+        views.BudgetListViewHomeApi.as_view(),
+        name="budgets_api_v1",
+    ),
+    path( #budgets-api-detail
+        'budgets/api/v1/<int:pk>/',
+        views.BudgetDetailAPI.as_view(),
+        name="budgets_api_v1_detail",
+    ),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
