@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     # Apps
     'budgets',
     'authors',
-    'debug_toolbar'
+    'debug_toolbar',
+    'tag',
 ]
 
 MIDDLEWARE = [

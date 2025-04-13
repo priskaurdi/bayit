@@ -2,7 +2,6 @@ import random
 import string
 
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import F, Value
 from django.db.models.functions import Concat
@@ -72,7 +71,7 @@ class Budget(models.Model):
         ('Cancelado', 'Cancelado'),
     ], default='Pendente')
     cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/', blank=True, default='')
-    tags = GenericRelation(Tag, related_query_name='budgets')
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.title

@@ -9,10 +9,7 @@ from .models import Budget, Category
 class CategoryAdmin(admin.ModelAdmin):
     ...
 
-class TagInline(GenericStackedInline):
-    model = Tag
-    fields = 'name',
-    extra = 1
+
 
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
@@ -27,9 +24,7 @@ class BudgetAdmin(admin.ModelAdmin):
         "slug": ('title',)
     }
 
-    inlines = [
-        TagInline,
-    ]
+
 
 
 admin.site.register(Category, CategoryAdmin)
