@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import F, Value
 from django.db.models.functions import Concat
+from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -85,6 +86,22 @@ class Budget(models.Model):
             random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
             self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
         super().save(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        error_messages = defaultdict(list)
+
+        budget_from_db = Budget.objects.filter(
+            title__iexact=self.title
+        ).first()
+
+        if budget_from_db:
+            if budget_from_db.pk != self.pk:
+                error_messages['title'].append(
+                    'Found budgets with the same title'
+                )
+
+        if error_messages:
+            raise ValidationError(error_messages)
 
 # class Tag(models.Model):
 #     name = models.CharField(max_length=50)
