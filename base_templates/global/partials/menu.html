@@ -14,8 +14,8 @@
             <a href="{% url 'budgets:home' %}">Home</a>
     
             {% if user.is_authenticated %}
-            {% comment %} <a href="{% url 'authors:dashboard_budget_new' %}">Novo Orçamento</a>
-            <a href="{% url 'authors:dashboard' %}">Dashboard</a> {% endcomment %}
+            <a href="{% url 'authors:dashboard_budget_new' %}">Novo Orçamento</a>
+            <a href="{% url 'authors:dashboard' %}">Dashboard</a>
             <a class="authors-logout-link" href="{% url 'authors:logout' %}">Logout</a>
             {% include 'authors/partials/form_logout.html' %}
             {% else %}
