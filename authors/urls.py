@@ -26,4 +26,9 @@ urlpatterns = [
         views.DashboardBudget.as_view(),
         name='dashboard_budget_edit'
     ),
+    path(
+        'profile/<int:id>/',
+        views.ProfileView.as_view(),
+        name='profile'
+    ),
 ]

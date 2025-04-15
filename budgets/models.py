@@ -72,7 +72,7 @@ class Budget(models.Model):
         ('Cancelado', 'Cancelado'),
     ], default='Pendente')
     cover = models.ImageField(upload_to='budgets/covers/%Y/%m/%d/', blank=True, default='')
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, default='')
 
     def __str__(self):
         return self.title

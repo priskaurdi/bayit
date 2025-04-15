@@ -6,8 +6,8 @@ from django.http import JsonResponse
 from django.http.response import Http404
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
-from tag.models import Tag
 
+from tag.models import Tag
 #from utils.budgets.factory import make_budget
 from utils.pagination import make_pagination
 
@@ -40,7 +40,7 @@ class BudgetListViewBase(ListView):
         qs = qs.filter(
             is_published=True,
         )
-        qs = qs.select_related('author', 'category')
+        qs = qs.select_related('author', 'category', 'author__profile')
         qs = qs.prefetch_related('tags')
         return qs
 

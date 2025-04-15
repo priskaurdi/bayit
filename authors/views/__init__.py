@@ -2,3 +2,4 @@
 
 from .all import *
 from .dashboard_budget import *
+from .profile import *
