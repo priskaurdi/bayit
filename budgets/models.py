@@ -1,6 +1,9 @@
+import os
 import random
 import string
+from collections import defaultdict
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import F, Value
@@ -9,6 +12,7 @@ from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
 from tag.models import Tag
 
@@ -81,12 +85,43 @@ class Budget(models.Model):
     def get_absolute_url(self):
         return reverse('budgets:budget', args=(self.id,))
 
+    @staticmethod
+    def resize_image(image, new_width=800):
+        image_full_path = os.path.join(settings.MEDIA_ROOT, image.name)
+        image_pillow = Image.open(image_full_path)
+        original_width, original_height = image_pillow.size
+
+        if original_width <= new_width:
+            image_pillow.close()
+            return
+
+        new_height = round((new_width * original_height) / original_width)
+
+        new_image = image_pillow.resize((new_width, new_height), Image.LANCZOS)
+        new_image.save(
+            image_full_path,
+            optimize=True,
+            quality=50,
+        )
+    
     def save(self, *args, **kwargs):
         if not self.slug:  # Executa apenas se o campo 'slug' estiver vazio
             slug_base = slugify(self.title)  # Gera o slug com base no título
             random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
             self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
-        super().save(*args, **kwargs)
+        
+        saved = super().save(*args, **kwargs)
+
+        if self.cover:
+            try:
+                self.resize_image(self.cover, 840)
+            except FileNotFoundError:
+                ...
+
+        return saved
+        
+
+
 
     def clean(self, *args, **kwargs):
         error_messages = defaultdict(list)
