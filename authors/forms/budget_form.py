@@ -21,7 +21,8 @@ class AuthorBudgetForm(forms.ModelForm):
         fields = [
             'title', 'description', 'equipment_brand', 'equipment_model', \
             'equipment_btus', 'preparation_time', 'preparation_time_unit', \
-            'servings', 'servings_unit', 'preparation_steps', 'cover'
+            'servings', 'servings_unit', 'preparation_steps', 'cover', \
+            'scheduled_date',
         ]
         widgets = {
             'cover': forms.FileInput(
@@ -42,6 +43,9 @@ class AuthorBudgetForm(forms.ModelForm):
                     ('Dias', 'Dias'),
                     ('Horas', 'Horas'),
                 ),
+            ),
+            'scheduled_date': forms.DateInput(
+                attrs={'type': 'date'}
             ),
         }
 

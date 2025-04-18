@@ -1,6 +1,6 @@
 from django.urls import resolve, reverse
 
-from budgets import views
+from budgets.views import site
 
 from .test_budget_base import BudgetTestBase
 
@@ -10,7 +10,7 @@ class BudgetDetailViewTest(BudgetTestBase):
         view = resolve(
             reverse('budgets:budget', kwargs={'pk': 1})
         )
-        self.assertIs(view.func.view_class, views.BudgetDetail)
+        self.assertIs(view.func.view_class, site.BudgetDetail)
 
     def test_budget_detail_view_returns_404_if_no_budgets_found(self):
         response = self.client.get(

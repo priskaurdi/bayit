@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'emoji',
-
+    'rest_framework',
+    
     # Apps
     'budgets',
     'authors',

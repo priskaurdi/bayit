@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.urls import resolve, reverse
 
-from budgets import views
+from budgets.views import site
 
 from .test_budget_base import BudgetTestBase
 
@@ -10,7 +10,7 @@ from .test_budget_base import BudgetTestBase
 class BudgetHomeViewTest(BudgetTestBase):
     def test_budget_home_view_function_is_correct(self):
         view = resolve(reverse('budgets:home'))
-        self.assertIs(view.func.view_class, views.BudgetListViewHome)
+        self.assertIs(view.func.view_class, site.BudgetListViewHome)
 
     def test_budget_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('budgets:home'))
@@ -55,7 +55,7 @@ class BudgetHomeViewTest(BudgetTestBase):
     def test_budget_home_is_paginated(self):
         self.make_budget_in_batch(qtd=8)
 
-        with patch('budgets.views.PER_PAGE', new=3):
+        with patch('budgets.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('budgets:home'))
             budgets = response.context['budgets']
             paginator = budgets.paginator
@@ -68,7 +68,7 @@ class BudgetHomeViewTest(BudgetTestBase):
     def test_invalid_page_query_uses_page_one(self):
         self.make_budget_in_batch(qtd=8)
 
-        with patch('budgets.views.PER_PAGE', new=3):
+        with patch('budgets.views.site.PER_PAGE', new=3):
             response = self.client.get(reverse('budgets:home') + '?page=12A')
             self.assertEqual(
                 response.context['budgets'].number,
