@@ -33,10 +33,13 @@ class BudgetManager(models.Manager):
                 F('author__last_name'), Value(' ('),
                 F('author__username'), Value(')'),
             )
-        ).order_by('-id')
+        ).order_by('-id')\
+        .select_related('category', 'author') \
+        .prefetch_related('tags')
     
 
 class Budget(models.Model):
+    objects = BudgetManager()
     title = models.CharField(max_length=65, verbose_name=_('Title'))
     description = models.CharField(max_length=165)
     slug = models.SlugField(unique=True, null=True, blank=True)

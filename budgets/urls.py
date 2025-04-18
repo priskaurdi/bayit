@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import site
+from budgets import views
 
 # budgets:budget
 app_name = 'budgets'
@@ -8,43 +8,57 @@ app_name = 'budgets'
 urlpatterns = [
     path( #budgets-home
         '', 
-        site.BudgetListViewHome.as_view(), 
+        views.BudgetListViewHome.as_view(), 
         name="home"
     ), 
     path( #budgets-search
         'budgets/search/', 
-        site.BudgetListViewSearch.as_view(), 
+        views.BudgetListViewSearch.as_view(), 
         name="search"
     ),
     path(
         'budgets/tags/<slug:slug>/',
-        site.BudgetListViewTag.as_view(),
+        views.BudgetListViewTag.as_view(),
         name="tag"
     ),
     path( #budgets-category
         'budgets/category/<int:category_id>/', 
-        site.BudgetListViewCategory.as_view(), 
+        views.BudgetListViewCategory.as_view(), 
         name="category"
     ),
     path( #budgets-budget
         'budgets/<int:pk>/', 
-        site.BudgetDetail.as_view(), 
+        views.BudgetDetail.as_view(), 
         name="budget"
     ), 
     path( #budgets-api
         'budgets/api/v1/',
-        site.BudgetListViewHomeApi.as_view(),
+        views.BudgetListViewHomeApi.as_view(),
         name="budgets_api_v1",
     ),
     path( #budgets-api-detail
         'budgets/api/v1/<int:pk>/',
-        site.BudgetDetailAPI.as_view(),
+        views.BudgetDetailAPI.as_view(),
         name="budgets_api_v1_detail",
     ),
     path( #budgets-theory
         'budgets/theory/',
-        site.theory,
+        views.theory,
         name='theory',
-    )
-    
+    ),
+    path(
+        'budgets/api/v2/',
+        views.budget_api_list,
+        name='budgets_api_v2'
+    ),
+    path(
+        'budgets/api/v2/<int:pk>/',
+        views.budget_api_detail,
+        name='budgets_api_v2_detail',
+    ),
+    path(
+        'budgets/api/v2/tag/<int:pk>/',
+        views.tag_api_detail,
+        name='budgets_api_v2_tag',
+    ),
 ]
