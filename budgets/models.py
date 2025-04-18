@@ -2,6 +2,7 @@ import os
 import random
 import string
 from collections import defaultdict
+from random import SystemRandom
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -49,26 +50,26 @@ class Budget(models.Model):
         ('Limpeza', 'Limpeza'),
         ('Elétrica', 'Elétrica'),
     ])
-    scheduled_date = models.DateField()
-    scheduled_time = models.TimeField()
-    street = models.CharField(max_length=255)
-    number = models.CharField(max_length=20)
-    neighborhood = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=2)
-    zipcode = models.CharField(max_length=10)
+    scheduled_date = models.DateField(null=True, blank=True)
+    scheduled_time = models.TimeField(null=True, blank=True)
+    street = models.CharField(max_length=255, null=True, blank=True)
+    number = models.CharField(max_length=20, null=True, blank=True)
+    neighborhood = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=2, null=True, blank=True)
+    zipcode = models.CharField(max_length=10, null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     equipment_brand = models.CharField(max_length=50)
     equipment_model = models.CharField(max_length=50)
-    equipment_btus = models.IntegerField()
-    budget_detail = models.TextField()
+    equipment_btus = models.IntegerField(null=True, blank=True)
+    budget_detail = models.TextField(null=True, blank=True)
     budget_detail_is_html = models.BooleanField(default=False)
-    preparation_time = models.IntegerField()
-    preparation_time_unit = models.CharField(max_length=65)
-    servings = models.IntegerField()
-    servings_unit = models.CharField(max_length=65)
-    preparation_steps = models.TextField()
+    preparation_time = models.IntegerField(null=True, blank=True)
+    preparation_time_unit = models.CharField(max_length=65, null=True, blank=True)
+    servings = models.IntegerField(null=True, blank=True)
+    servings_unit = models.CharField(max_length=65, null=True, blank=True)
+    preparation_steps = models.TextField(null=True, blank=True)
     preparation_steps_is_html = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -109,10 +110,14 @@ class Budget(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:  # Executa apenas se o campo 'slug' estiver vazio
-            slug_base = slugify(self.title)  # Gera o slug com base no título
-            random_string = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))  # Gera uma string aleatória de 5 caracteres
-            self.slug = f"{slug_base}-{random_string}"  # Adiciona a string aleatória ao slug base
-        
+            rand_letters = ''.join(
+                SystemRandom().choices(
+                    string.ascii_letters + string.digits,
+                    k=5,
+                )
+            )
+            self.slug = slugify(f'{self.title}-{rand_letters}')
+            
         saved = super().save(*args, **kwargs)
 
         if self.cover:
