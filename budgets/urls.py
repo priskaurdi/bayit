@@ -1,9 +1,19 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
 
 from budgets import views
 
 # budgets:budget
 app_name = 'budgets'
+
+budget_api_v2_router = SimpleRouter()
+budget_api_v2_router.register(
+    'budgets/api/v2',
+    views.BudgetAPIv2ViewSet,
+    basename='budgets-api',
+)
 
 urlpatterns = [
     path( #budgets-home
@@ -46,19 +56,27 @@ urlpatterns = [
         views.theory,
         name='theory',
     ),
-    path(
-        'budgets/api/v2/',
-        views.budget_api_list,
-        name='budgets_api_v2'
-    ),
-    path(
-        'budgets/api/v2/<int:pk>/',
-        views.budget_api_detail,
-        name='budgets_api_v2_detail',
-    ),
+    
     path(
         'budgets/api/v2/tag/<int:pk>/',
         views.tag_api_detail,
         name='budgets_api_v2_tag',
     ),
+    path(
+        'budgets/api/token/',
+        TokenObtainPairView.as_view(),
+        name='token_obtain_pair'
+    ),
+    path(
+        'budgets/api/token/refresh/',
+        TokenRefreshView.as_view(),
+        name='token_refresh'
+    ),
+    path(
+        'budgets/api/token/verify/',
+        TokenVerifyView.as_view(),
+        name='token_verify'
+    ),
+    # Por último
+    path('', include(budget_api_v2_router.urls)),
 ]

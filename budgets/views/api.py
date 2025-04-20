@@ -1,7 +1,10 @@
+from unicodedata import category
+
 from django.shortcuts import get_object_or_404
-from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from tag.models import Tag
 
@@ -9,43 +12,40 @@ from ..models import Budget
 from ..serializers import BudgetSerializer, TagSerializer
 
 
-@api_view(http_method_names=['get', 'post'])
-def budget_api_list(request):
-    if request.method == 'GET':
-        budgets = Budget.objects.get_published()[:10]
-        serializer = BudgetSerializer(
-            instance=budgets,
-            many=True,
-            context={'request': request},
-        )
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = BudgetSerializer(
-            data=request.data,
-            context={'request': request},
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+class BudgetAPIv2Pagination(PageNumberPagination):
+    page_size = 2
+    
+class BudgetAPIv2ViewSet(ModelViewSet):
+    queryset = Budget.objects.get_published()
+    serializer_class = BudgetSerializer
+    pagination_class = BudgetAPIv2Pagination
+    
+    def get_serializer_class(self):
+        return super().get_serializer_class()
 
+    def get_serializer(self, *args, **kwargs):
+        return super().get_serializer(*args, **kwargs)
 
-@api_view(['get', 'patch', 'delete'])
-def budget_api_detail(request, pk):
-    budget = get_object_or_404(
-        Budget.objects.get_published(),
-        pk=pk
-    )
-    if request.method == 'GET':
-        serializer = BudgetSerializer(
-            instance=budget,
-            many=False,
-            context={'request': request},
-        )
-        return Response(serializer.data)
-    elif request.method == 'PATCH':
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["example"] = 'this is in context now'
+        return context
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        category_id = self.request.query_params.get('category_id', '')
+
+        if category_id != '' and category_id.isnumeric():
+            qs = qs.filter(category_id=category_id)
+
+        return qs
+
+    
+    def partial_update(self, request, *args, **kwarg):
+        pk = kwarg.get('pk')
+
+        budget = self.get_queryset().filter(pk=pk).first()
         serializer = BudgetSerializer(
             instance=budget,
             data=request.data,
@@ -58,9 +58,6 @@ def budget_api_detail(request, pk):
         return Response(
             serializer.data,
         )
-    elif request.method == 'DELETE':
-        budget.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view()

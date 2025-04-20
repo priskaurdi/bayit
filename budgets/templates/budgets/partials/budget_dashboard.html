@@ -4,34 +4,92 @@
 {% block content %}
 <h1>📊 Dashboard de Orçamentos</h1>
 <div class="dashboard-charts">
-    <div class="chart-container">
-        <canvas id="lineChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="barChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="doughnutChart"></canvas>
-    </div>
+    <div class="chart-container"><canvas id="lineChart"></canvas></div>
+    <div class="chart-container"><canvas id="barCategoryChart"></canvas></div>
+    <div class="chart-container"><canvas id="doughnutChart"></canvas></div>
+    <div class="chart-container" id="author-chart"><canvas id="barAuthorChart"></canvas></div>
 </div>
 {% endblock %}
 
 {% block extrahead %}
     {{ block.super }}
     <style>
+        .dashboard-layout {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+        }
+    
+        .app-section,
+        .dashboard-charts,
+        .recent-actions {
+            flex: 1;
+            min-width: 275px;
+        }
+    
         .dashboard-charts {
+            flex: 2;
+            background: #222;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .charts-row {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
-            margin-bottom: 30px;
-            justify-content: space-around;
+            margin-top: 20px;
+            width: 100%;
         }
-
+    
         .chart-container {
-            width: 400px;
-            height: 300px;
+            flex: 1 1 30%;   /* flexível, 3 por linha se couber */
+            min-width: 250px;
+            max-width: 400px;
+            height: 250px;
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
         }
-    </style>
+    
+        .recent-actions {
+            flex: 1;
+            max-width: 350px;
+            min-width: 275px;
+            margin-left: auto; /* <<< empurra pro canto direito */
+        }
+    
+        /* Dois gráficos por linha */
+        .charts-row .chart-container {
+            width: 48%;
+        }
+    
+        .chart-container#author-chart {
+            height: 300px; /* ou até 400px, se tiver muitos autores */
+        }
+        
+    /* Responsividade: empilha os gráficos em telas menores */
+    @media (max-width: 900px) {
+        .dashboard-layout {
+            flex-direction: column;
+            gap: 20px;
+        }
+        .dashboard-charts {
+            min-width: unset;
+            width: 100%;
+        }
+        .charts-row .chart-container {
+            width: 100%;
+            min-width: unset;
+        }
+    }
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -68,6 +126,18 @@
                         label: 'Por Tipo de Serviço',
                         data: {{ data_service|safe }},
                         backgroundColor: ['red', 'orange', 'yellow', 'purple']
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById('barChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: {{ labels_author|safe }},
+                    datasets: [{
+                        label: 'Por Cliente',
+                        data: {{ data_author|safe }},
+                        backgroundColor: 'purple'
                     }]
                 }
             });

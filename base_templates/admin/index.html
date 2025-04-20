@@ -61,6 +61,10 @@
         width: 48%;
     }
 
+    .chart-container#author-chart {
+        height: 300px; /* ou até 400px, se tiver muitos autores */
+    }
+
 /* Responsividade: empilha os gráficos em telas menores */
 @media (max-width: 900px) {
     .dashboard-layout {
@@ -92,11 +96,10 @@
     <div class="dashboard-charts">
         <h2>📊 Dashboard de Orçamentos</h2>
         <div class="charts-row">
-            
-                <div class="chart-container"><canvas id="lineChart"></canvas></div>
-                <div class="chart-container"><canvas id="barChart"></canvas></div>
-                <div class="chart-container"><canvas id="doughnutChart"></canvas></div>
-            
+            <div class="chart-container"><canvas id="lineChart"></canvas></div>
+            <div class="chart-container"><canvas id="barCategoryChart"></canvas></div>
+            <div class="chart-container"><canvas id="doughnutChart"></canvas></div>
+            <div class="chart-container"><canvas id="barAuthorChart"></canvas></div>
         </div>
     </div>
 
@@ -124,50 +127,91 @@
         const dataCategory = {{ data_category|safe }};
         const labelsService = {{ labels_service|safe }};
         const dataService = {{ data_service|safe }};
+        const labelsAuthors = {{ labels_author|safe }};
+        const dataAuthor = {{ data_author|safe }};
 
-        new Chart(document.getElementById('lineChart').getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: labelsMonth,
-                datasets: [{
-                    label: 'Orçamentos por Mês',
-                    data: dataMonth,
-                    borderColor: 'red',
-                    backgroundColor: 'rgba(255,0,0,0.1)',
-                    fill: true,
-                    borderWidth: 3,          // linha mais grossa
-                    tension: 0.3,            // suavização da curva
-                    pointRadius: 4,          // tamanho dos pontos
-                    pointBackgroundColor: 'red'
-                }]
-            }
-        });
-
-        new Chart(document.getElementById('barChart').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: labelsCategory,
-                datasets: [{
-                    label: 'Por Categoria',
-                    data: dataCategory,
-                    backgroundColor: 'green',
-                    borderColor: 'black',
-                    borderWidth: 1
-                }]
-            }
-        });
-
-        new Chart(document.getElementById('doughnutChart').getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: labelsService,
-                datasets: [{
-                    label: 'Por Serviço',
-                    data: dataService,
-                    backgroundColor: ['red', 'green', 'blue', 'purple']
-                }]
-            }
-        });
+        // Gráfico de linha - por mês
+    new Chart(document.getElementById('lineChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: labelsMonth,
+            datasets: [{
+                label: 'Orçamentos por Mês',
+                data: dataMonth,
+                borderColor: 'red',
+                backgroundColor: 'rgba(255,0,0,0.1)',
+                fill: true,
+                borderWidth: 3,
+                tension: 0.3,
+                pointRadius: 4,
+                pointBackgroundColor: 'red'
+            }]
+        }
     });
+
+    // Gráfico de barras - por categoria
+    new Chart(document.getElementById('barCategoryChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labelsCategory,
+            datasets: [{
+                label: 'Por Categoria',
+                data: dataCategory,
+                backgroundColor: 'green',
+                borderColor: 'black',
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Gráfico de rosca - por serviço
+    new Chart(document.getElementById('doughnutChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: labelsService,
+            datasets: [{
+                label: 'Por Serviço',
+                data: dataService,
+                backgroundColor: ['red', 'green', 'blue', 'purple']
+            }]
+        }
+    });
+
+    // Gráfico de barras horizontal - por autor
+    new Chart(document.getElementById('barAuthorChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: labelsAuthors,
+        datasets: [{
+            label: 'Por Autor',
+            data: dataAuthor,
+            backgroundColor: 'purple',
+            borderColor: 'black',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,  // 👈 permite ajustar altura manualmente
+        plugins: {
+            title: {
+                display: true,
+                text: 'Orçamentos por Autor'
+            }
+        },
+        scales: {
+            x: { beginAtZero: true },
+            y: {
+                ticks: {
+                    autoSkip: false,  // 👈 não pula autores
+                    maxRotation: 0,
+                    minRotation: 0
+                }
+            }
+        }
+    }
+});
+});
 </script>
 {% endblock %}
