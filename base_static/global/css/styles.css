@@ -729,4 +729,20 @@ a {
     height: 100%;
     display: inline-block;
     
-}     
+}  
+
+
+/* ========= GRAFICOS NO ADMIN ========= */
+/* .dashboard-charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: space-around;
+}
+
+.chart-container {
+    width: 400px;
+    height: 300px;
+}
+ */

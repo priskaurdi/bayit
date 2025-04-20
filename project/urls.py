@@ -21,7 +21,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from budgets.views.admin_dashboard import budget_dashboard
+
+admin.site.index_template = 'admin/index.html'
+
 urlpatterns = [
+    path('admin/', budget_dashboard),
     path('admin/', admin.site.urls),
     path('', include('budgets.urls')),
     path('authors/', include('authors.urls')),

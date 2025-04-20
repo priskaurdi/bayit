@@ -1,0 +1,173 @@
+{% extends "admin/index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<style>
+    .dashboard-layout {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+    }
+
+    .app-section,
+    .dashboard-charts,
+    .recent-actions {
+        flex: 1;
+        min-width: 275px;
+    }
+
+    .dashboard-charts {
+        flex: 2;
+        background: #222;
+        padding: 20px;
+        border-radius: 6px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .charts-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .chart-container {
+        flex: 1 1 30%;   /* flexível, 3 por linha se couber */
+        min-width: 250px;
+        max-width: 400px;
+        height: 250px;
+        background: #333;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .recent-actions {
+        flex: 1;
+        max-width: 350px;
+        min-width: 275px;
+        margin-left: auto; /* <<< empurra pro canto direito */
+    }
+
+    /* Dois gráficos por linha */
+    .charts-row .chart-container {
+        width: 48%;
+    }
+
+/* Responsividade: empilha os gráficos em telas menores */
+@media (max-width: 900px) {
+    .dashboard-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .dashboard-charts {
+        min-width: unset;
+        width: 100%;
+    }
+    .charts-row .chart-container {
+        width: 100%;
+        min-width: unset;
+    }
+}
+    
+</style>
+
+<div id="content-main" class="dashboard-layout">
+
+    <div class="app-section">
+        {% if app_list %}
+        <div id="app-list">
+            {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-charts">
+        <h2>📊 Dashboard de Orçamentos</h2>
+        <div class="charts-row">
+            
+                <div class="chart-container"><canvas id="lineChart"></canvas></div>
+                <div class="chart-container"><canvas id="barChart"></canvas></div>
+                <div class="chart-container"><canvas id="doughnutChart"></canvas></div>
+            
+        </div>
+    </div>
+
+</div>
+<div class="recent-actions">
+    {% if recent_actions %}
+    <div class="module" id="recent-actions-module">
+        <h2>{% trans 'Recent actions' %}</h2>
+        {% include "admin/recent_actions.html" %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const labelsMonth = {{ labels_month|safe }};
+        const dataMonth = {{ data_month|safe }};
+        const labelsCategory = {{ labels_category|safe }};
+        const dataCategory = {{ data_category|safe }};
+        const labelsService = {{ labels_service|safe }};
+        const dataService = {{ data_service|safe }};
+
+        new Chart(document.getElementById('lineChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labelsMonth,
+                datasets: [{
+                    label: 'Orçamentos por Mês',
+                    data: dataMonth,
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(255,0,0,0.1)',
+                    fill: true,
+                    borderWidth: 3,          // linha mais grossa
+                    tension: 0.3,            // suavização da curva
+                    pointRadius: 4,          // tamanho dos pontos
+                    pointBackgroundColor: 'red'
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('barChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labelsCategory,
+                datasets: [{
+                    label: 'Por Categoria',
+                    data: dataCategory,
+                    backgroundColor: 'green',
+                    borderColor: 'black',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('doughnutChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: labelsService,
+                datasets: [{
+                    label: 'Por Serviço',
+                    data: dataService,
+                    backgroundColor: ['red', 'green', 'blue', 'purple']
+                }]
+            }
+        });
+    });
+</script>
+{% endblock %}

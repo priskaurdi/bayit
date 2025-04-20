@@ -1,0 +1,76 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>📊 Dashboard de Orçamentos</h1>
+<div class="dashboard-charts">
+    <div class="chart-container">
+        <canvas id="lineChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="doughnutChart"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .dashboard-charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: space-around;
+        }
+
+        .chart-container {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new Chart(document.getElementById('lineChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: {{ labels_month|safe }},
+                    datasets: [{
+                        label: 'Orçamentos por Mês',
+                        data: {{ data_month|safe }},
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById('barChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: {{ labels_category|safe }},
+                    datasets: [{
+                        label: 'Por Categoria',
+                        data: {{ data_category|safe }},
+                        backgroundColor: 'green'
+                    }]
+                }
+            });
+
+            new Chart(document.getElementById('doughnutChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: {{ labels_service|safe }},
+                    datasets: [{
+                        label: 'Por Tipo de Serviço',
+                        data: {{ data_service|safe }},
+                        backgroundColor: ['red', 'orange', 'yellow', 'purple']
+                    }]
+                }
+            });
+        });
+    </script>
+{% endblock %}
