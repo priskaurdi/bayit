@@ -8,12 +8,10 @@ from .base import AuthorsBaseTest
 @pytest.mark.functional_test
 class AuthorsRegisterTest(AuthorsBaseTest):
     def fill_form_dummy_data(self, form):
-
         fields = form.find_elements(By.TAG_NAME, 'input')
-
         for field in fields:
             if field.is_displayed():
-                field.send_keys(' ' * 20)
+                field.clear()
 
     def get_form(self):
         return self.browser.find_element(
@@ -34,7 +32,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
     def test_empty_first_name_error_message(self):
         def callback(form):
             first_name_field = self.get_by_placeholder(form, 'Ex.: John')
-            first_name_field.send_keys(' ')
+            first_name_field.clear()
             first_name_field.send_keys(Keys.ENTER)
             form = self.get_form()
             self.assertIn('Write your first name', form.text)
@@ -43,7 +41,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
     def test_empty_last_name_error_message(self):
         def callback(form):
             last_name_field = self.get_by_placeholder(form, 'Ex.: Doe')
-            last_name_field.send_keys(' ')
+            last_name_field.clear()
             last_name_field.send_keys(Keys.ENTER)
             form = self.get_form()
             self.assertIn('Write your last name', form.text)
@@ -52,7 +50,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
     def test_empty_username_error_message(self):
         def callback(form):
             username_field = self.get_by_placeholder(form, 'Your username')
-            username_field.send_keys(' ')
+            username_field.clear()
             username_field.send_keys(Keys.ENTER)
             form = self.get_form()
             self.assertIn('This field must not be empty', form.text)
@@ -74,6 +72,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             password1.send_keys('P@ssw0rd')
             password2.send_keys('P@ssw0rd_Different')
             password2.send_keys(Keys.ENTER)
+            self.sleep(1)
             form = self.get_form()
             self.assertIn('Password and password2 must be equal', form.text)
         self.form_field_test_with_callback(callback)
@@ -93,8 +92,7 @@ class AuthorsRegisterTest(AuthorsBaseTest):
             form, 'Repeat your password').send_keys('P@ssw0rd1')
 
         form.submit()
+        self.sleep(1)
 
-        self.assertIn(
-            'Your user is created, please log in.',
-            self.browser.find_element(By.TAG_NAME, 'body').text
-        )
+        body = self.browser.find_element(By.TAG_NAME, 'body')
+        self.assertIn('Your user is created, please log in.', body.text)

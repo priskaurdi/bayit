@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from parameterized import parameterized
@@ -14,7 +16,7 @@ class BudgetModelTest(BudgetTestBase):
         budget = Budget(
             category=self.make_category(name='Test Default Category'),
             author=self.make_author(username='newuser'),
-            title='Budget Title',
+            title=f"Budget Title {uuid.uuid4()}",
             description='Budget Description',
             service_type='Limpeza',  # Corrigido: Adicionado valor obrigatório
             scheduled_date='2025-03-10',  # Corrigido: Adicionado valor obrigatório
