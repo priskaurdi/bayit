@@ -16,7 +16,7 @@ from ..serializers import BudgetSerializer, TagSerializer
 
 
 class BudgetAPIv2Pagination(PageNumberPagination):
-    page_size = 2
+    page_size = 3
     
 class BudgetAPIv2ViewSet(ModelViewSet):
     queryset = Budget.objects.get_published()
@@ -64,8 +64,6 @@ class BudgetAPIv2ViewSet(ModelViewSet):
         return super().get_permissions()
 
     def list(self, request, *args, **kwargs):
-        print('REQUEST', request.user)
-        print(request.user.is_authenticated)
         return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
