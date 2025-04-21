@@ -41,7 +41,9 @@ ALLOWED_HOSTS: list[str] = parse_comma_sep_str_to_list(
 CSRF_TRUSTED_ORIGINS: list[str] = parse_comma_sep_str_to_list(
     get_env_variable('CSRF_TRUSTED_ORIGINS')
 )
-
+CORS_ALLOWED_ORIGINS = parse_comma_sep_str_to_list(
+    get_env_variable('CORS_ALLOWED_ORIGINS')
+)
 
 # Application definition
 
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'corsheaders',
 
     'emoji',
     'rest_framework_simplejwt',
@@ -67,6 +71,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -197,3 +202,4 @@ SIMPLE_JWT = {
     'SIGNING_KEY': os.environ.get('SECRET_KEY_JWT', 'INSECURE'),     
     'AUTH_HEADER_TYPES': ('Bearer',), 
 }
+
