@@ -18,23 +18,28 @@ O BayitEnergy é uma plataforma completa que auxilia profissionais autônomos na
 
 ## Tecnologias
 
-* **Front-end:** React, Angular, HTML, CSS, Javascript, Typescript
-* **Back-end:** Node.js, Python (Django/Flask)
+* **Front-end:** HTML, CSS, Javascript, Typescript
+* **Back-end:** Python (Django)
 * **Banco de Dados:** MySQL
-* **Nuvem:** DigitalOcean
+* **Nuvem:** Google Cloud
 * **APIs:** Stripe/PayPal (pagamentos), Google Maps (geolocalização), Google Calendar (notificações)
 
 ## Configuração
 
 1.  Clone o repositório: `git clone https://github.com/priskaurdi/bayit.git`
-2.  Instale as dependências: `pip install -r requirements.txt`
-3.  Configure as variáveis de ambiente (banco de dados, APIs).
-4.  Execute o front-end: 
-5.  Execute o back-end: `python manage.py runserver` (Django)
+2.  verifique o local pwd
+3.  crie uma venv ao nivel das pastas externas e ative-a `python -m venv .venv` e `source .venv/Scripts/activate # Ativar ambiente`
+5.  Instale as dependências: `pip install -r requirements.txt` (back-end)
+6.  Configure as variáveis de ambiente (banco de dados, APIs) em um novo arquivo .env de acordo com o exemplo. 
+    (sugestão de geração de chave: `from django.core.management.utils import get_random_secret_key print(get_random_secret_key())`
+7. Rode as migrações `python manage.py makemigrations && python manage.py migrate`
+8. Execute o back-end: `python manage.py runserver` 
+
+
 
 ## Testes
 
-* Testes unitários: `pytest` `coverage run`
+* Testes unitários: `pytest`, `coverage run`, `coverage html`
 * Testes de integração: [Instruções para executar os testes de integração]
 * Testes de ponta a ponta: [Instruções para executar os testes de ponta a ponta]
 
