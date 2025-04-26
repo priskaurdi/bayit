@@ -29,11 +29,13 @@ O BayitEnergy é uma plataforma completa que auxilia profissionais autônomos na
 1.  Clone o repositório: `git clone https://github.com/priskaurdi/bayit.git`
 2.  verifique o local pwd
 3.  crie uma venv ao nivel das pastas externas e ative-a `python -m venv .venv` e `source .venv/Scripts/activate # Ativar ambiente`
-5.  Instale as dependências: `pip install -r requirements.txt` (back-end)
-6.  Configure as variáveis de ambiente (banco de dados, APIs) em um novo arquivo .env de acordo com o exemplo. 
+5.  Execute o comando: `pip install django-cors-headers`
+
+6. Instale as dependências: `pip install -r requirements.txt` (back-end) 
+7.  Configure as variáveis de ambiente (banco de dados, APIs) em um novo arquivo .env de acordo com o exemplo. 
     (sugestão de geração de chave: `from django.core.management.utils import get_random_secret_key print(get_random_secret_key())`
-7. Rode as migrações `python manage.py makemigrations && python manage.py migrate`
-8. Execute o back-end: `python manage.py runserver` 
+8. Rode as migrações `python manage.py makemigrations && python manage.py migrate`
+9. Execute o back-end: `python manage.py runserver` 
 
 
 
